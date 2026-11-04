@@ -1989,5 +1989,25 @@ ${contenido.innerHTML}
     }
     </script>
 
+    <script>
+    // Ocultar corrector ortográfico del formulario y panel de asistente IA
+    (function(){
+        // Ocultar corrector del formulario principal (padre del textarea texto-revision-pdc)
+        var ta = document.getElementById('texto-revision-pdc');
+        if(ta && ta.closest) {
+            var cont = ta.closest('div[style*="border-left:4px solid var(--accent);"]');
+            if(cont) cont.style.display = 'none';
+        }
+        // Ocultar panel completo del Asistente PDC con PyTorch
+        var h2s = document.querySelectorAll('h2');
+        for(var i=0; i<h2s.length; i++){
+            if(h2s[i].textContent && h2s[i].textContent.indexOf('Asistente PDC') !== -1){
+                var card = h2s[i].closest ? h2s[i].closest('.card') : null;
+                if(card) card.style.display = 'none';
+            }
+        }
+    })();
+    </script>
+
 </body>
 </html>
