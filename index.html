@@ -710,6 +710,96 @@
         };
 
         // Momentos metodológicos específicos por área (plantillas)
+        const SINONIMOS_GENERICOS = {
+            practica: [
+                `Lluvia de ideas sobre ${contenido}.`,
+                `Observamos ejemplos reales de ${contenido}.`,
+                `Manipulamos materiales concretos de ${contenido}.`,
+                `Ejercicios prácticos de ${contenido} en equipos.`,
+                `Aplicamos ${contenido} en la vida cotidiana.`,
+                `Práctica guiada de ${contenido}.`,
+                `Experimentamos con ${contenido} en el aula.`,
+                `Actividad hands-on sobre ${contenido}.`,
+                `Caso práctico vinculado a ${contenido}.`,
+                `Trabajo en grupo para practicar ${contenido}.`,
+                `Demostración práctica de ${contenido}.`,
+                `Modelo físico o digital de ${contenido}.`,
+                `Investigación de campo sobre ${contenido}.`,
+                `Habilidades de ${contenido} en parejas.`,
+                `Experimento sencillo sobre ${contenido}.`,
+                `${contenido} mediante juegos educativos.`,
+                `Práctica supervisada de ${contenido}.`,
+                `Manipulamos objetos para comprender ${contenido}.`,
+                `Problemas reales con ${contenido}.`,
+                `Actividad lúdica sobre ${contenido}.`
+            ],
+            teoria: [
+                `Fundamentos teóricos de ${contenido}.`,
+                `Conceptos clave de ${contenido}.`,
+                `Lectura informativa sobre ${contenido}.`,
+                `Teoría de ${contenido} con ejemplos.`,
+                `Antecedentes y evolución de ${contenido}.`,
+                `Principios básicos de ${contenido}.`,
+                `Implicaciones de ${contenido} en la sociedad.`,
+                `Clasificación y tipos de ${contenido}.`,
+                `Relación de ${contenido} con otros saberes.`,
+                `Capítulo especializado sobre ${contenido}.`,
+                `Términos técnicos de ${contenido}.`,
+                `Historia y desarrollo de ${contenido}.`,
+                `Normas y reglas de ${contenido}.`,
+                `Casos de estudio sobre ${contenido}.`,
+                `Procesos de ${contenido}.`,
+                `Marcos teóricos de ${contenido}.`,
+                `Resumen de artículo sobre ${contenido}.`,
+                `Causas y efectos de ${contenido}.`,
+                `Características de ${contenido}.`,
+                `Importancia de ${contenido} hoy.`
+            ],
+            produccion: [
+                `Mapa conceptual de ${contenido}.`,
+                `Ensayo corto sobre ${contenido}.`,
+                `Afiche informativo de ${contenido}.`,
+                `Maquete o modelo de ${contenido}.`,
+                `Cuento o poema de ${contenido}.`,
+                `Presentación digital de ${contenido}.`,
+                `Video explicando ${contenido}.`,
+                `Infográfico de ${contenido}.`,
+                `Portafolio de evidencias de ${contenido}.`,
+                `Proyecto creativo de ${contenido}.`,
+                `Guion o dramatización de ${contenido}.`,
+                `Revista mural de ${contenido}.`,
+                `Juego educativo de ${contenido}.`,
+                `Informe de investigación de ${contenido}.`,
+                `Colección de imágenes de ${contenido}.`,
+                `Manual práctico de ${contenido}.`,
+                `Experimento documentado de ${contenido}.`,
+                `Obra de arte de ${contenido}.`,
+                `Prototipo de ${contenido}.`,
+                `Artículo de divulgación de ${contenido}.`
+            ],
+            valoracion: [
+                `Cuestionario sobre ${contenido}.`,
+                `Autoevaluación con rúbrica de ${contenido}.`,
+                `Retroalimentación entre pares de ${contenido}.`,
+                `Proyecto final de ${contenido}.`,
+                `Prueba escrita de ${contenido}.`,
+                `Habilidad práctica de ${contenido}.`,
+                `Diario de aprendizaje de ${contenido}.`,
+                `Video resumen de ${contenido}.`,
+                `Problema de aplicación de ${contenido}.`,
+                `Entrevista oral de ${contenido}.`,
+                `Observación guiada de ${contenido}.`,
+                `Lista de cotejo de ${contenido}.`,
+                `Rúbrica de coevaluación de ${contenido}.`,
+                `Exposición oral de ${contenido}.`,
+                `Examen de conceptos de ${contenido}.`,
+                `Práctica supervisada de ${contenido}.`,
+                `Portafolio para evaluar ${contenido}.`,
+                `Debate estructurado de ${contenido}.`,
+                `Simulación evaluada de ${contenido}.`,
+                `Autoevaluación y coevaluación de ${contenido}.`
+            ]
+        };
         function generarMomentosEspecificos(area, contenido, semana) {
             const plantillas = {
                 "Comunicación y Lenguajes": {
@@ -986,8 +1076,17 @@
                     `${v} la práctica de valores sociocomunitarios a partir de ${temas2}, orientada a la prevención de la violencia y la armonía comunitaria.`
                 ]
             };
-            const opciones = plantillas[area] || [`${v} saberes y conocimientos relacionados con ${temas}, fortaleciendo el pensamiento crítico y la convivencia sociocomunitaria.`];
-            return pick(opciones);
+            const momentos = {};
+            const tiposMomento = ['practica', 'teoria', 'produccion', 'valoracion'];
+            const areaData = plantillas[area] || {};
+            tiposMomento.forEach(m => {
+                const especificas = areaData[m] || [];
+                const genericas = SINONIMOS_GENERICOS[m] || [];
+                const todas = [...especificas, ...genericas];
+                const unicas = todas.filter((item, index) => todas.indexOf(item) === index);
+                momentos[m] = unicas.length > 0 ? pick(unicas) : `Contenido relacionado con ${temas} en ${m}.`;
+            });
+            return momentos;
         }
 
         function generarAdaptacionArea(area, contenidos, tipo) {
