@@ -1624,6 +1624,14 @@ ${contenido.innerHTML}
             <button onclick="generarActividad('valoracion')" class="btn" style="background: var(--secondary); color: white;">✅ Valoración</button>
         </div>
 
+        <!-- Revisión de redacción con LanguageTool -->
+        <div style="margin-top:1.5rem; padding:1rem; background:var(--light); border-radius:8px; border-left:4px solid var(--accent);">
+            <h4 style="margin:0 0 0.5rem 0; color:var(--dark);">✍️ Revisar redacción (LanguageTool)</h4>
+            <textarea id="texto-revision" rows="3" placeholder="Pega aquí un objetivo, actividad o cualquier texto para revisar ortografía y gramática..." style="width:100%; margin-bottom:0.5rem; font-family:inherit;"></textarea>
+            <button onclick="revisarRedaccion()" class="btn" style="background:var(--accent); color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer;">🔍 Revisar gramática y ortografía</button>
+            <div id="resultado-revision" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+        </div>
+
         <div id="resultado-ia" style="margin-top: 1rem; padding: 1rem; background: var(--light); border-radius: 8px; display: none; border-left: 4px solid var(--success);"></div>
     </div>
 
@@ -1690,6 +1698,49 @@ ${contenido.innerHTML}
             <br><br>
             <button onclick="generarActividad('${tipo}')" class="btn" style="margin-top:0.5rem; background:var(--secondary); color:white; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">🔄 Otra opción</button>
         `;
+    }
+
+    async function revisarRedaccion() {
+        const texto = document.getElementById('texto-revision').value.trim();
+        if (!texto) {
+            alert('Escribe un texto para revisar');
+            return;
+        }
+
+        const div = document.getElementById('resultado-revision');
+        div.innerHTML = '<span style="color:var(--secondary); font-size:0.85rem;">Revisando con LanguageTool...</span>';
+
+        try {
+            const respuesta = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'text=' + encodeURIComponent(texto) + '&language=es'
+            });
+            const data = await respuesta.json();
+
+            if (!data.matches || data.matches.length === 0) {
+                div.innerHTML = '<span style="color:var(--success);">✅ No se encontraron errores de gramática u ortografía.</span>';
+                return;
+            }
+
+            let html = `<strong>⚠️ Se encontraron ${data.matches.length} posible(s) error(es):</strong><ul style="margin:0.3rem 0 0 1rem; padding:0;">`;
+            data.matches.slice(0, 10).forEach(match => {
+                const contexto = match.context ? match.context.text : '';
+                const reemplazo = match.replacements && match.replacements[0] ? match.replacements[0].value : '';
+                html += `<li><strong>${match.shortMessage || match.message}</strong><br>
+                         <em>Contexto:</em> …${contexto}…<br>
+                         ${reemplazo ? '<em>Sugerencia:</em> "' + reemplazo + '"' : ''}
+                         </li>`;
+            });
+            html += '</ul>';
+            if (data.matches.length > 10) {
+                html += `<p style="font-size:0.8rem;color:#666;">Y ${data.matches.length - 10} más…</p>`;
+            }
+            div.innerHTML = html;
+        } catch (error) {
+            div.innerHTML = '<span style="color:#d9534f;">Error al conectar con LanguageTool. Verifica tu conexión a internet.</span>';
+            console.error(error);
+        }
     }
     </script>
 
