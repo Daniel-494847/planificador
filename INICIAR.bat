@@ -7,7 +7,7 @@ echo  INICIANDO GENERADOR DE PDC + PYTORCH
 echo ========================================
 echo.
 
-cd /d "c:\Users\EQUIPO\Desktop\PLANIFICADOR\backend"
+cd /d "c:\Users\EQUIPO\Desktop\2026\PDCS 2026\PLANIFICADOR\backend"
 
 echo [1/3] Activando entorno virtual Python...
 call venv\Scripts\activate.bat

@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de PDC - 5to Primaria </title>
+    <meta name="description" content="Generador Inteligente de Plan de Desarrollo Curricular (PDC) para 5to Primaria. Crea planificaciones con áreas, momentos metodológicos e indicadores específicos. UE Oscar Alfaro - Bermejo.">
+    <meta property="og:title" content="Generador de PDC - 5to Primaria | UE Oscar Alfaro">
+    <meta property="og:description" content="Generador Inteligente de Plan de Desarrollo Curricular (PDC) para 5to Primaria. Crea planificaciones con áreas, momentos metodológicos e indicadores específicos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://daniel-494847.github.io/planificador/">
+    <meta property="og:image" content="https://daniel-494847.github.io/planificador/logo-pdc.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Generador de PDC - 5to Primaria | UE Oscar Alfaro">
+    <meta name="twitter:description" content="Generador Inteligente de Plan de Desarrollo Curricular (PDC) para 5to Primaria.">
+    <style>
+        :root {
+            --primary: #1a5276;
+            --secondary: #2874a6;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --border: #dee2e6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f4f8 0%, #f5f7fa 100%);
+            color: var(--dark);
+            line-height: 1.45;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .header h1 { font-size: 1.55rem; margin-bottom: 0.25rem; }
+        .header p { font-size: 0.92rem; opacity: 0.92; }
+        .logo-pdc {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.4rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+        .container { max-width: 1450px; margin: 0 auto; padding: 1.3rem; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            padding: 1.4rem;
+            margin-bottom: 1.3rem;
+        }
+        .card h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.45rem;
+            margin-bottom: 1.1rem;
+            font-size: 1.25rem;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.3rem;
+            margin-bottom: 1.1rem;
+        }
+        .form-group { flex: 1; min-width: 200px; }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        select, input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 0.9rem;
+        }
+        .area-box {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 0.9rem;
+            background: var(--light);
+        }
+        .area-box h3 {
+            background: var(--primary);
+            color: white;
+            margin: -0.9rem -0.9rem 0.7rem -0.9rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px 8px 0 0;
+            font-size: 0.9rem;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.45rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.84rem;
+        }
+        .checkbox-item input { margin-top: 0.18rem; flex-shrink: 0; }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(26,82,118,0.28); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-ai {
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            color: white;
+        }
+        .btn-word {
+            background: linear-gradient(90deg, #1a5276, #2874a6);
+            color: white;
+        }
+        .actions {
+            display: flex;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        #resultado { display: none; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.8rem 0;
+            font-size: 0.84rem;
+        }
+        th, td {
+            border: 1px solid #aab7b8;
+            padding: 0.55rem 0.6rem;
+            vertical-align: top;
+        }
+        th {
+            background: #f0f0f0;
+            color: #000;
+            text-align: center;
+            font-size: 0.82rem;
+        }
+        tr:nth-child(even) { background: #f9f9f9; }
+        td { color: #000; }
+        h2, h3, p, strong, li { color: #000; }
+        .momento { margin-bottom: 0.45rem; }
+        .momento strong { color: #000; }
+        .area-title {
+            background: none;
+            color: #000;
+            padding: 0.5rem 0;
+            margin: 1.5rem 0 0.5rem 0;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .obj-box {
+            background: none;
+            border-left: none;
+            padding: 0.4rem 0;
+            margin-bottom: 0.6rem;
+            border-radius: 0;
+            font-size: 0.9rem;
+            color: #000;
+        }
+        .adapt-title {
+            background: none;
+            color: #000;
+            padding: 0.4rem 0;
+            margin: 1rem 0 0.4rem 0;
+            border-radius: 0;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+        .ai-section {
+            background: linear-gradient(135deg, #f5eef8, #ebdef0);
+            border: 2px solid #8e44ad;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .ai-badge {
+            display: inline-block;
+            background: #8e44ad;
+            color: white;
+            font-size: 0.72rem;
+            padding: 0.18rem 0.55rem;
+            border-radius: 16px;
+            margin-left: 0.4rem;
+        }
+        .alert {
+            padding: 0.9rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .alert-info { background: #d6eaf8; border-left: 5px solid var(--secondary); }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 0.8rem;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .datos-table td { background: none; color: #000; }
+        .datos-table td:first-child { font-weight: 600; width: 22%; background: none; color: #000; }
+        @page {
+            size: Letter landscape;
+            margin: 1.2cm 1cm;
+        }
+        @media print {
+            body { background: white; }
+            .header, .form-card, .actions, .no-print, .ai-section { display: none !important; }
+            #resultado { display: block !important; }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .area-title { break-before: page; }
+            table { page-break-inside: avoid; font-size: 9pt; }
+            th, td { padding: 4px 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-pdc">PDC</div>
+        <h1>Generador Inteligente de Plan de Desarrollo Curricular</h1>
+        <p>Unidad Educativa Oscar Alfaro · Primaria Comunitaria Vocacional · 5to “B” · Gestión 2026 · Bermejo</p>
+    </div>
+
+    <div class="container">
+        <div class="card form-card">
+            <h2>1. Configuración del PDC</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="trimestre">Trimestre</label>
+                    <select id="trimestre" onchange="cargarContenidos()">
+                        <option value="">-- Seleccione el trimestre --</option>
+                        <option value="1">Primer Trimestre</option>
+                        <option value="2">Segundo Trimestre</option>
+                        <option value="3">Tercer Trimestre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="adaptacion">Tipo de Adaptación Curricular</label>
+                    <select id="adaptacion">
+                        <option value="sin_adaptaciones">Sin adaptaciones</option>
+                        <option value="significativa">Adaptación Significativa</option>
+                        <option value="no_significativa">Adaptación No Significativa</option>
+                        <option value="acceso">Adaptación de Acceso</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="mes">Mes del PDC</label>
+                    <select id="mes">
+                        <option value="Mayo">Mayo</option>
+                        <option value="Febrero">Febrero</option>
+                        <option value="Marzo">Marzo</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Junio">Junio</option>
+                        <option value="Julio">Julio</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Septiembre">Septiembre</option>
+                        <option value="Octubre">Octubre</option>
+                        <option value="Noviembre">Noviembre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fechaIni">Del (fecha inicio)</label>
+                    <input type="text" id="fechaIni" value="11 de mayo del 2026" placeholder="Ej: 11 de mayo del 2026">
+                </div>
+                <div class="form-group">
+                    <label for="fechaFin">Al (fecha fin)</label>
+                    <input type="text" id="fechaFin" value="29 de mayo del 2026" placeholder="Ej: 29 de mayo del 2026">
+                </div>
+                <div class="form-group">
+                    <label for="numeroPDC">Número de PDC</label>
+                    <input type="text" id="numeroPDC" value="4" placeholder="Ej: 4">
+                </div>
+            </div>
+
+            <div id="contenidos-container" style="display:none;">
+                <h3 style="margin: 1rem 0 0.7rem; color: var(--primary);">2. Seleccione los contenidos por área</h3>
+                <div class="alert alert-info">
+                    Marque los contenidos que desea incluir. Se generará una tabla completa por cada área seleccionada, con 4 semanas, momentos metodológicos e indicadores específicos (no genéricos).
+                </div>
+                <div id="areas-checkboxes" class="areas-grid"></div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="generarPDC(false)">Generar PDC</button>
+                <button class="btn btn-ai" onclick="generarPDC(true)">Generar con IA <span class="ai-badge">IA</span></button>
+                <button class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+            </div>
+
+            <!-- Revisión de ortografía y sintaxis durante el diseño del PDC -->
+            <div style="margin-top:1.5rem; padding:1rem; background:var(--light); border-radius:8px; border-left:4px solid var(--accent);">
+                <h4 style="margin:0 0 0.5rem 0; color:var(--dark);">✍️ Revisar ortografía y sintaxis del PDC</h4>
+                <p style="font-size:0.85rem; color:#555; margin-bottom:0.5rem;">Pega aquí cualquier texto del PDC (objetivo, actividad, indicador) para revisarlo antes de generar.</p>
+                <textarea id="texto-revision-pdc" rows="3" placeholder="Escribe o pega aquí el texto del PDC para revisar ortografía y gramática..." style="width:100%; margin-bottom:0.5rem; font-family:inherit;"></textarea>
+                <button onclick="revisarRedaccionPDC()" class="btn" style="background:var(--accent); color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer;">🔍 Revisar gramática y ortografía</button>
+                <div id="resultado-revision-pdc" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+            </div>
+        </div>
+
+        <div id="resultado">
+            <div class="card">
+                <div class="actions no-print" style="margin-bottom: 1rem;">
+                    <button class="btn btn-success" onclick="window.print()">Imprimir / Guardar PDF</button>
+                    <button class="btn btn-word" onclick="descargarWord()">Descargar en Word</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('resultado').style.display='none'">Cerrar</button>
+                </div>
+                <div id="contenido-pdc"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== DATOS DEL PAT =====================
+        const patData = {
+            1: {
+                objetivoHolistico: "Fortalecemos los valores de unidad e igualdad en la convivencia sociocomunitaria, estudiando los saberes y conocimientos espirituales, tecnológicos científicos y artísticos de forma oral y escrita, a partir de las prácticas vivenciales comunitarias, para promover el manejo equilibrado del desarrollo productivo en el Estado Plurinacional.",
+                areas: {
+                    "Comunicación y Lenguajes": [
+                        "El debate: expresión oral",
+                        "Planificación y uso del lenguaje formal",
+                        "La argumentación",
+                        "La entrevista: comprensión lectora y producción escrita",
+                        "Características y partes de la entrevista",
+                        "Tilde de palabras interrogativas y exclamativas",
+                        "El verbo: modos y conjugación",
+                        "La entrevista: expresión oral",
+                        "Diversos modos de entrevistar",
+                        "El folleto: comprensión lectora y producción escrita",
+                        "El diptongo y el hiato",
+                        "Analogías: relación de sinónimos",
+                        "La poesía: comprensión lectora y producción escrita",
+                        "Tilde diacrítica en monosílabos",
+                        "El artículo informativo",
+                        "Lengua Originaria: Yaikua tamaraeme recua (saludos)",
+                        "Lengua Extranjera: The numbers"
+                    ],
+                    "Ciencias Sociales": [
+                        "Mapa de pérdidas territoriales de Bolivia",
+                        "Usurpación del Litoral por parte de Chile y acciones heroicas de Genoveva Ríos y Juancito Pinto",
+                        "Guerra del Chaco",
+                        "Consecuencias contra la vida, cultura y economía de la invasión española"
+                    ],
+                    "Artes Plásticas y Visuales": [
+                        "Dibujo infantil de animales, plantas, personas y paisajes",
+                        "El objeto, la luz y la sombra",
+                        "Periódico mural: dibujos y mensajes sobre la prevención de la violencia de género",
+                        "Manejo de escuadras y realización de diseños decorativos (pictogramas - petroglifos)",
+                        "Construcción y medición de ángulos con el transportador"
+                    ],
+                    "Ciencias Naturales": [
+                        "Pisos ecológicos: las cuencas y su relación con el clima, flora y fauna en Bolivia",
+                        "Erosión del suelo por la acción natural y artificial y sus efectos en la biodiversidad",
+                        "Etapas y procesos que forman el ciclo integral del agua",
+                        "El saneamiento básico y su aporte a la reducción de riesgos"
+                    ],
+                    "Matemática": [
+                        "Múltiplos y divisores",
+                        "Números primos y compuestos",
+                        "Propiedades y criterios de la divisibilidad",
+                        "Mínimo común múltiplo (mcm) y Máximo común divisor (mcd)",
+                        "Fracciones equivalentes, homogéneas, heterogéneas y mixtas",
+                        "Adición y sustracción de fracciones",
+                        "Multiplicación y división de fracciones",
+                        "Resolución de problemas fraccionarios simples y complejos",
+                        "Clasificación y propiedades del paralelogramo",
+                        "Cuadriláteros: clasificación, perímetro y área",
+                        "Paralelismo e intersección",
+                        "Plano cartesiano: puntos y figuras"
+                    ],
+                    "Técnica Tecnológica": [
+                        "Tecnologías y/o mecanismos para la cosecha de agua según contexto",
+                        "Procesos de deshidratación de alimentos según contexto",
+                        "Fundamentos de la robótica (tipos, funciones y características)"
+                    ],
+                    "Educación Física y Deportes": [
+                        "Medidas antropométricas: peso y talla; nutrición, hidratación y hábitos de higiene",
+                        "Ejercicios físicos de capacidades condicionales y coordinativas en juegos cooperativos",
+                        "Ejercicios de orden, posiciones, alineaciones, giros y formaciones",
+                        "El calentamiento y sus diferentes etapas"
+                    ],
+                    "Educación Musical": [
+                        "Ejercicios de técnica vocal (relajación, respiración y emisión vocal)",
+                        "Himno nacional (4 partes)",
+                        "Marcha Naval",
+                        "Canto a Abaroa",
+                        "Práctica rítmica con figuras de negras y silencios en compases simples",
+                        "Elementos de la música (melodía, ritmo y armonía)"
+                    ],
+                    "Valores, Espiritualidades y Religiones": [
+                        "Justicia social",
+                        "La diversidad religiosa en el estado plurinacional",
+                        "Relación de dualidad y paridad en el pensamiento de las N y PIOs"
+                    ]
+                }
+            },
+            2: {
+                objetivoHolistico: "Fortalecemos los valores de unidad e igualdad en la convivencia socio comunitaria, estudiando los saberes y conocimientos espirituales, tecnológicos científicos y artísticos de forma oral y escrita, a partir de las prácticas vivenciales comunitarias, para promover el manejo equilibrado del desarrollo productivo en el Estado Plurinacional.",
+                areas: {
+                    "Comunicación y Lenguajes": [
+                        "La entrevista: comprensión lectora y producción escrita",
+                        "Características y partes de la entrevista",
+                        "Tilde de palabras interrogativas y exclamativas",
+                        "El verbo: modos y conjugación",
+                        "La entrevista: expresión oral",
+                        "La cuña radial",
+                        "Uso de la B y V",
+                        "La oración: sujeto y predicado",
+                        "El reportaje: comprensión lectora y producción escrita",
+                        "Uso de la G y J",
+                        "Técnicas de estudio: el mapa conceptual",
+                        "Lengua Originaria: Arajai (la hora)",
+                        "Lengua Extranjera: The time"
+                    ],
+                    "Ciencias Sociales": [
+                        "Organización política y social en la época colonial y resistencia de los pueblos indígenas",
+                        "Movimientos independentistas en el Alto Perú y creación de la República de Bolivia",
+                        "El tributo indígena, resistencia y principales rebeliones",
+                        "Líderes y héroes de las naciones y pueblos indígena originario campesinos"
+                    ],
+                    "Artes Plásticas y Visuales": [
+                        "Manejo de escuadras y realización de diseños decorativos (pictogramas - petroglifos)",
+                        "Construcción y medición de ángulos con el transportador",
+                        "Caligrafía V"
+                    ],
+                    "Ciencias Naturales": [
+                        "Sistema respiratorio: estructura, función, efectos del cigarrillo y contaminación del aire",
+                        "Sistema circulatorio: estructura, función y hábitos de cuidado",
+                        "Sistema digestivo: estructura, función y trastornos alimenticios",
+                        "Los sistemas reproductores, sus funciones y cuidado: Gestión Menstrual Digna"
+                    ],
+                    "Matemática": [
+                        "Razones y proporciones",
+                        "Regla de tres simple",
+                        "Medidas de volumen: múltiplos y submúltiplos del metro cúbico",
+                        "Múltiplos y submúltiplos del metro cuadrado",
+                        "Equivalencias y conversiones de unidades de superficie y volumen"
+                    ],
+                    "Técnica Tecnológica": [
+                        "Componentes electrónicos para la construcción de mecanismos",
+                        "Juguete robot móvil y el uso de fuentes de energía (pilas y/o baterías)",
+                        "Hoja de cálculo Excel: funciones básicas"
+                    ],
+                    "Educación Física y Deportes": [
+                        "Mini atletismo: relevos, resistencia, salto triple, salto largo",
+                        "Mini Baloncesto: movimientos, paradas y cambio de dirección",
+                        "Mini Voleibol: posiciones, desplazamientos, voleo y saques"
+                    ],
+                    "Educación Musical": [
+                        "Canciones cívicas departamentales y nacionales",
+                        "Himno a la madre",
+                        "Himno al maestro",
+                        "Canto a Bolívar",
+                        "Música autóctona y popular",
+                        "Clasificación de instrumentos musicales"
+                    ],
+                    "Valores, Espiritualidades y Religiones": [
+                        "Bienestar común",
+                        "Ceremonias y ritos espirituales practicados desde la diversidad de nuestro país",
+                        "La interrelación en la diversidad cultural de los pueblos del Abya Yala"
+                    ]
+                }
+            },
+            3: {
+                objetivoHolistico: "Asumimos principios y valores de responsabilidad, complementariedad, redistribución, comparando saberes y conocimientos de las NPIOyA con otros sobre la seguridad alimentaria y las formas de producción con manipulación genética, elementos químicos y ecológicos, mediante actividades de investigación, análisis, debates y producción de textos, para promover la producción y vida saludable en convivencia armoniosa con los sistemas de vida.",
+                areas: {
+                    "Comunicación y Lenguajes": [
+                        "Refranes y proverbios",
+                        "Uso de la H",
+                        "El predicado y su estructura",
+                        "Símil y metáfora",
+                        "El diálogo: expresión oral",
+                        "El cómic",
+                        "El punto y coma",
+                        "La narración: expresión oral",
+                        "El lenguaje, la lengua y el habla",
+                        "Lengua Originaria: Keräipa ñañandu (los cinco sentidos)",
+                        "Lengua Extranjera: The five senses"
+                    ],
+                    "Ciencias Sociales": [
+                        "Mujeres lideresas y sus aportes en la historia de Bolivia",
+                        "Lucha de las naciones y pueblos indígena originario campesinos y afrobolivianos",
+                        "Asamblea Constituyente y la fundación del Estado Plurinacional",
+                        "Constitución Política del Estado Plurinacional"
+                    ],
+                    "Artes Plásticas y Visuales": [
+                        "Obtención de los colores del círculo cromático",
+                        "Maquetismo con temática “las culturas del Abya Yala”",
+                        "Composiciones artísticas con diversos materiales"
+                    ],
+                    "Ciencias Naturales": [
+                        "La fotosíntesis: su proceso e importancia",
+                        "Biodiversidad: recuperación y cuidado de especies en extinción",
+                        "El agua en el planeta Tierra",
+                        "El sol, la luna y la Tierra: características e influencia"
+                    ],
+                    "Matemática": [
+                        "Potencia: términos de una potencia",
+                        "Potencia de base 10 y 100",
+                        "Pictogramas y gráfico de barras simples",
+                        "Lectura e interpretación de pictogramas y gráficos de barras"
+                    ],
+                    "Técnica Tecnológica": [
+                        "Aplicaciones de Google Drive y Jamboard",
+                        "Word, Excel y PowerPoint desde la computadora y dispositivos móviles",
+                        "Programación por bloques: Scratch Jr, TinkerCad, S4A, Mbloc"
+                    ],
+                    "Educación Física y Deportes": [
+                        "Mini Fútbol: golpeo, pases, recepciones, cabeceo, conducción y remate",
+                        "Gimnasia educativa",
+                        "Ajedrez: tablero, valor de las piezas, jaque, enroques y mates básicos"
+                    ],
+                    "Educación Musical": [
+                        "Compases simples en canciones, ritmo y danza",
+                        "Lectura musical de ritmos tradicionales de Bolivia",
+                        "Danzas de Bolivia e instrumentos musicales de las regiones",
+                        "Ensamble instrumental y coro"
+                    ],
+                    "Valores, Espiritualidades y Religiones": [
+                        "El autoconcepto: quién soy yo",
+                        "Interdependencia entre la madre tierra y el ser humano",
+                        "Resolución de conflictos"
+                    ]
+                }
+            }
+        };
+
+        // ===================== BANCOS DE INDICADORES ESPECÍFICOS =====================
+        const bancosIndicadores = {
+            "Comunicación y Lenguajes": {
+                ser: [
+                    "Demuestra respeto y tolerancia ante las opiniones de sus pares durante los debates y entrevistas",
+                    "Asume responsabilidad en el cumplimiento de tareas de producción oral y escrita asignadas"
+                ],
+                saber: [
+                    "Identifica la estructura y características del debate y la entrevista",
+                    "Aplica correctamente la tilde en palabras interrogativas y exclamativas",
+                    "Reconoce los modos verbales (indicativo, subjuntivo e imperativo) en diversos textos",
+                    "Diferencia el lenguaje formal del informal en contextos comunicativos",
+                    "Explica las partes de una entrevista (título, introducción, cuerpo y cierre)",
+                    "Identifica conectores y recursos argumentativos en textos orales y escritos"
+                ],
+                hacer: [
+                    "Elabora guiones de entrevista respetando su estructura formal",
+                    "Participa activamente en debates utilizando argumentos coherentes y lenguaje formal",
+                    "Produce textos escritos aplicando las reglas ortográficas y gramaticales estudiadas"
+                ]
+            },
+            "Ciencias Sociales": {
+                ser: [
+                    "Demuestra respeto y empatía hacia la historia de lucha de las naciones originarias",
+                    "Manifiesta responsabilidad en el trabajo comunitario y solidario dentro del aula"
+                ],
+                saber: [
+                    "Explica las causas de la crisis demográfica indígena tras la invasión española",
+                    "Identifica los elementos de imposición cultural y religiosa de la colonia",
+                    "Describe los sistemas de explotación económica (mita y encomienda)",
+                    "Comprende el impacto de la desarticulación de los sistemas de producción originarios",
+                    "Reconoce en el mapa las pérdidas territoriales de Bolivia",
+                    "Identifica a las y los héroes de los acontecimientos históricos estudiados"
+                ],
+                hacer: [
+                    "Organiza información histórica en esquemas y mapas conceptuales coherentes",
+                    "Participa activamente en producciones artísticas y debates sobre la soberanía",
+                    "Redacta textos breves donde propone soluciones a conflictos actuales basados en el pasado"
+                ]
+            },
+            "Artes Plásticas y Visuales": {
+                ser: [
+                    "Demuestra responsabilidad y puntualidad en la presentación de sus láminas y trabajos",
+                    "Manifiesta respeto por las expresiones artísticas de sus compañeros/as"
+                ],
+                saber: [
+                    "Identifica correctamente la escuadra y el cartabón según sus ángulos",
+                    "Describe los pasos técnicos para el trazado de líneas paralelas y perpendiculares",
+                    "Reconoce el significado histórico de los pictogramas y petroglifos locales",
+                    "Diferencia las características visuales entre un pictograma y un petroglifo",
+                    "Explica la relación entre luz, sombra y volumen en el dibujo",
+                    "Identifica elementos de composición en diseños decorativos ancestrales"
+                ],
+                hacer: [
+                    "Maneja con destreza las escuadras para realizar trazos limpios y precisos",
+                    "Crea diseños decorativos inspirados en la simbología de los pueblos originarios",
+                    "Aplica técnicas de entintado o color en la finalización de sus obras artísticas"
+                ]
+            },
+            "Ciencias Naturales": {
+                ser: [
+                    "Demuestra respeto y escucha activa en los diálogos comunitarios sobre salud y medio ambiente",
+                    "Manifiesta compromiso con el cuidado de la biodiversidad y el saneamiento local"
+                ],
+                saber: [
+                    "Identifica la estructura y función de los órganos del sistema respiratorio",
+                    "Explica el proceso de intercambio gaseoso y su importancia para la vida",
+                    "Describe los componentes del saneamiento básico y su relación con la prevención de enfermedades",
+                    "Reconoce los efectos del cigarrillo y la contaminación del aire en los pulmones",
+                    "Explica las etapas del ciclo integral del agua",
+                    "Identifica causas y consecuencias de la erosión del suelo en el contexto local"
+                ],
+                hacer: [
+                    "Construye modelos o esquemas del sistema respiratorio o del ciclo del agua",
+                    "Elabora mapas de riesgos sanitarios de su barrio o comunidad",
+                    "Produce mensajes preventivos y afiches sobre hábitos de vida saludable"
+                ]
+            },
+            "Matemática": {
+                ser: [
+                    "Demuestra responsabilidad en el trabajo comunitario y en la resolución de problemas",
+                    "Practica el respeto mutuo durante las actividades grupales de cálculo y geometría"
+                ],
+                saber: [
+                    "Identifica algoritmos de resolución en problemas fraccionarios simples y complejos",
+                    "Clasifica los cuadriláteros y paralelogramos según sus propiedades",
+                    "Diferencia conceptos de perímetro y área en figuras planas",
+                    "Describe la ubicación de puntos en el plano cartesiano",
+                    "Aplica criterios de divisibilidad y calcula mcm y mcd",
+                    "Reconoce fracciones equivalentes, homogéneas, heterogéneas y mixtas"
+                ],
+                hacer: [
+                    "Resuelve problemas de la vida diaria utilizando fracciones y operaciones",
+                    "Calcula perímetros y áreas en figuras planas del entorno",
+                    "Grafica figuras geométricas en el plano cartesiano con precisión"
+                ]
+            },
+            "Técnica Tecnológica": {
+                ser: [
+                    "Demuestra responsabilidad en el uso de herramientas tecnológicas y materiales",
+                    "Fortalece la cooperación en el trabajo grupal comunitario"
+                ],
+                saber: [
+                    "Identifica los componentes electrónicos internos de un motor pequeño",
+                    "Explica la función de las fuentes de energía (pilas y baterías)",
+                    "Describe el proceso de ensamblaje de un juguete robot móvil",
+                    "Diferencia los tipos de conexiones eléctricas básicas",
+                    "Reconoce tecnologías propias para la cosecha de agua o deshidratación de alimentos",
+                    "Identifica fundamentos básicos de la robótica (tipos y funciones)"
+                ],
+                hacer: [
+                    "Construye un mecanismo electrónico funcional utilizando un pequeño motor",
+                    "Ensambla un juguete robot móvil con materiales del entorno",
+                    "Conecta adecuadamente fuentes de energía a circuitos básicos"
+                ]
+            },
+            "Educación Física y Deportes": {
+                ser: [
+                    "Demuestra actitud de respeto, colaboración y juego limpio en las actividades deportivas",
+                    "Practica hábitos de higiene, nutrición e hidratación antes, durante y después del ejercicio"
+                ],
+                saber: [
+                    "Identifica las etapas del calentamiento y su importancia",
+                    "Explica las reglas básicas de los mini deportes practicados",
+                    "Reconoce las capacidades condicionales y coordinativas trabajadas",
+                    "Describe posiciones y desplazamientos correctos en los juegos deportivos",
+                    "Identifica medidas antropométricas básicas (peso y talla)",
+                    "Comprende la importancia de la igualdad de género en la práctica deportiva"
+                ],
+                hacer: [
+                    "Ejecuta ejercicios de formación, giros, desplazamientos y marchas con precisión",
+                    "Aplica técnicas básicas de los mini deportes (baloncesto, voleibol, fútbol o atletismo)",
+                    "Participa activamente en juegos cooperativos respetando turnos y reglas"
+                ]
+            },
+            "Educación Musical": {
+                ser: [
+                    "Demuestra respeto y atención durante la interpretación coral e instrumental",
+                    "Valora las manifestaciones musicales de su contexto y del país"
+                ],
+                saber: [
+                    "Identifica los elementos de la música (melodía, ritmo y armonía)",
+                    "Reconoce figuras rítmicas de negras y silencios en compases simples",
+                    "Explica mensajes que transmiten los himnos y canciones cívicas estudiadas",
+                    "Clasifica instrumentos musicales según su familia o región",
+                    "Identifica compases simples (2/4, 3/4, 4/4)",
+                    "Reconoce danzas e instrumentos de las regiones geográficas de Bolivia"
+                ],
+                hacer: [
+                    "Interpreta cantos corales y himnos con entonación y técnica vocal adecuada",
+                    "Ejecuta práctica rítmica con figuras musicales en canciones del contexto",
+                    "Participa en ensambles instrumentales o coreografías adaptadas a los ritmos"
+                ]
+            },
+            "Valores, Espiritualidades y Religiones": {
+                ser: [
+                    "Demuestra respeto hacia la diversidad religiosa y cultural de su comunidad",
+                    "Manifiesta actitudes de justicia, igualdad y bienestar común en la convivencia diaria"
+                ],
+                saber: [
+                    "Identifica ceremonias y ritos espirituales practicados en la familia y comunidad",
+                    "Explica el sentido de la dualidad y paridad en el pensamiento de las N y PIOs",
+                    "Reconoce la importancia de la justicia social en el Estado Plurinacional",
+                    "Describe la interrelación entre la madre tierra y el ser humano",
+                    "Identifica estrategias básicas de resolución de conflictos",
+                    "Valora el autoconcepto y la interdependencia comunitaria"
+                ],
+                hacer: [
+                    "Propone acciones concretas orientadas al bienestar común y la prevención de la violencia",
+                    "Participa en reflexiones y diálogos sobre diversidad religiosa y cultural",
+                    "Elabora mensajes o expresiones artísticas que fortalezcan la convivencia pacífica"
+                ]
+            }
+        };
+
+        // Momentos metodológicos específicos por área (plantillas)
+        const SINONIMOS_GENERICOS = {
+            practica: [
+                `Lluvia de ideas sobre ${contenido}.`,
+                `Observamos ejemplos reales de ${contenido}.`,
+                `Manipulamos materiales concretos de ${contenido}.`,
+                `Ejercicios prácticos de ${contenido} en equipos.`,
+                `Aplicamos ${contenido} en la vida cotidiana.`,
+                `Práctica guiada de ${contenido}.`,
+                `Experimentamos con ${contenido} en el aula.`,
+                `Actividad hands-on sobre ${contenido}.`,
+                `Caso práctico vinculado a ${contenido}.`,
+                `Trabajo en grupo para practicar ${contenido}.`,
+                `Demostración práctica de ${contenido}.`,
+                `Modelo físico o digital de ${contenido}.`,
+                `Investigación de campo sobre ${contenido}.`,
+                `Habilidades de ${contenido} en parejas.`,
+                `Experimento sencillo sobre ${contenido}.`,
+                `${contenido} mediante juegos educativos.`,
+                `Práctica supervisada de ${contenido}.`,
+                `Manipulamos objetos para comprender ${contenido}.`,
+                `Problemas reales con ${contenido}.`,
+                `Actividad lúdica sobre ${contenido}.`,
+                `Talleres prácticos sobre ${contenido}.`,
+                `Dinámicas grupales aplicando ${contenido}.`,
+                `Simulacro de situación real con ${contenido}.`,
+                `Aplicamos ${contenido} en proyectos escolares.`,
+                `Resolvemos problemas prácticos de ${contenido}.`,
+                `Manipulación directa de materiales de ${contenido}.`,
+                `Prácticas de laboratorio sobre ${contenido}.`,
+                `Aplicación directa de ${contenido} en contexto.`,
+                `Ejercicios de aplicación de ${contenido}.`,
+                `Trabajo colaborativo con ${contenido}.`,
+                `Simulación de ${contenido} en el aula.`,
+                `Aplicación práctica de ${contenido} paso a paso.`,
+                `Actividades manipulativas con ${contenido}.`,
+                `Práctica reflexiva sobre ${contenido}.`,
+                `Aplicamos ${contenido} en la comunidad.`,
+                `Ejercitación guiada de ${contenido}.`,
+                `Realizamos una práctica de campo de ${contenido}.`,
+                `Aplicamos ${contenido} en situaciones problemas.`,
+                `Práctica individual y colectiva de ${contenido}.`,
+                `Aplicación vivencial de ${contenido}.`
+            ],
+            teoria: [
+                `Fundamentos teóricos de ${contenido}.`,
+                `Conceptos clave de ${contenido}.`,
+                `Lectura informativa sobre ${contenido}.`,
+                `Teoría de ${contenido} con ejemplos.`,
+                `Antecedentes y evolución de ${contenido}.`,
+                `Principios básicos de ${contenido}.`,
+                `Implicaciones de ${contenido} en la sociedad.`,
+                `Clasificación y tipos de ${contenido}.`,
+                `Relación de ${contenido} con otros saberes.`,
+                `Capítulo especializado sobre ${contenido}.`,
+                `Términos técnicos de ${contenido}.`,
+                `Historia y desarrollo de ${contenido}.`,
+                `Normas y reglas de ${contenido}.`,
+                `Casos de estudio sobre ${contenido}.`,
+                `Procesos de ${contenido}.`,
+                `Marcos teóricos de ${contenido}.`,
+                `Resumen de artículo sobre ${contenido}.`,
+                `Causas y efectos de ${contenido}.`,
+                `Características de ${contenido}.`,
+                `Importancia de ${contenido} hoy.`,
+                `Definiciones fundamentales de ${contenido}.`,
+                `Análisis crítico de ${contenido}.`,
+                `Teorías explicativas de ${contenido}.`,
+                `Estudio de la estructura de ${contenido}.`,
+                `Revisión bibliográfica sobre ${contenido}.`,
+                `Explicación de los elementos de ${contenido}.`,
+                `Lectura comprensiva de textos sobre ${contenido}.`,
+                `Análisis de las implicaciones de ${contenido}.`,
+                `Estudio de los componentes de ${contenido}.`,
+                `Revisión de conceptos teóricos de ${contenido}.`,
+                `Análisis de causas y consecuencias de ${contenido}.`,
+                `Estudio de la evolución de ${contenido}.`,
+                `Lectura de fuentes especializadas sobre ${contenido}.`,
+                `Explicación de los procesos de ${contenido}.`,
+                `Revisión de la literatura sobre ${contenido}.`,
+                `Análisis de la relación entre ${contenido} y la realidad.`,
+                `Estudio de los fundamentos de ${contenido}.`,
+                `Comprensión de los principios de ${contenido}.`,
+                `Análisis de las características de ${contenido}.`,
+                `Revisión de los postulados de ${contenido}.`
+            ],
+            produccion: [
+                `Mapa conceptual de ${contenido}.`,
+                `Ensayo corto sobre ${contenido}.`,
+                `Afiche informativo de ${contenido}.`,
+                `Maquete o modelo de ${contenido}.`,
+                `Cuento o poema de ${contenido}.`,
+                `Presentación digital de ${contenido}.`,
+                `Video explicando ${contenido}.`,
+                `Infográfico de ${contenido}.`,
+                `Portafolio de evidencias de ${contenido}.`,
+                `Proyecto creativo de ${contenido}.`,
+                `Guion o dramatización de ${contenido}.`,
+                `Revista mural de ${contenido}.`,
+                `Juego educativo de ${contenido}.`,
+                `Informe de investigación de ${contenido}.`,
+                `Colección de imágenes de ${contenido}.`,
+                `Manual práctico de ${contenido}.`,
+                `Experimento documentado de ${contenido}.`,
+                `Obra de arte de ${contenido}.`,
+                `Prototipo de ${contenido}.`,
+                `Artículo de divulgación de ${contenido}.`,
+                `Cuadro comparativo de ${contenido}.`,
+                `Diagrama de ${contenido}.`,
+                `Podcast sobre ${contenido}.`,
+                `Blog escolar de ${contenido}.`,
+                `Guion de radio sobre ${contenido}.`,
+                `Fotografía documental de ${contenido}.`,
+                `Ilustración de ${contenido}.`,
+                `Comic escolar de ${contenido}.`,
+                `Guion de video de ${contenido}.`,
+                `Infografía interactiva de ${contenido}.`,
+                `Colección de recortes de ${contenido}.`,
+                `Revista digital de ${contenido}.`,
+                `Mapa mental de ${contenido}.`,
+                `Cronología de ${contenido}.`,
+                `Tablero de ideas de ${contenido}.`,
+                `Portafolio digital de ${contenido}.`,
+                `Guía didáctica de ${contenido}.`,
+                `Manual de instrucciones de ${contenido}.`,
+                `Libro de bolsillo de ${contenido}.`,
+                `Carpeta de evidencias de ${contenido}.`
+            ],
+            valoracion: [
+                `Cuestionario sobre ${contenido}.`,
+                `Autoevaluación con rúbrica de ${contenido}.`,
+                `Retroalimentación entre pares de ${contenido}.`,
+                `Proyecto final de ${contenido}.`,
+                `Prueba escrita de ${contenido}.`,
+                `Habilidad práctica de ${contenido}.`,
+                `Diario de aprendizaje de ${contenido}.`,
+                `Video resumen de ${contenido}.`,
+                `Problema de aplicación de ${contenido}.`,
+                `Entrevista oral de ${contenido}.`,
+                `Observación guiada de ${contenido}.`,
+                `Lista de cotejo de ${contenido}.`,
+                `Rúbrica de coevaluación de ${contenido}.`,
+                `Exposición oral de ${contenido}.`,
+                `Examen de conceptos de ${contenido}.`,
+                `Práctica supervisada de ${contenido}.`,
+                `Portafolio para evaluar ${contenido}.`,
+                `Debate estructurado de ${contenido}.`,
+                `Simulación evaluada de ${contenido}.`,
+                `Autoevaluación y coevaluación de ${contenido}.`,
+                `Prueba de desempeño de ${contenido}.`,
+                `Presentación de evidencias de ${contenido}.`,
+                `Rúbrica de autoevaluación de ${contenido}.`,
+                `Entrevista de comprensión de ${contenido}.`,
+                `Prueba objetiva de ${contenido}.`,
+                `Observación sistemática de ${contenido}.`,
+                `Presentación de portafolio de ${contenido}.`,
+                `Examen escrito de ${contenido}.`,
+                `Defensa oral de proyecto de ${contenido}.`,
+                `Prueba de aplicación de ${contenido}.`,
+                `Rúbrica de evaluación de ${contenido}.`,
+                `Coevaluación de trabajos de ${contenido}.`,
+                `Prueba de transferencia de ${contenido}.`,
+                `Informe de prácticas de ${contenido}.`,
+                `Autoinforme de aprendizaje de ${contenido}.`,
+                `Prueba de comprensión lectora de ${contenido}.`,
+                `Evaluación de producto de ${contenido}.`,
+                `Prueba de rendimiento de ${contenido}.`,
+                `Presentación de síntesis de ${contenido}.`,
+                `Evaluación de habilidades de ${contenido}.`
+            ]
+        };
+        function generarMomentosEspecificos(area, contenido, semana) {
+            const plantillas = {
+                "Comunicación y Lenguajes": {
+                    practica: [
+                        `Realizamos una lluvia de ideas sobre situaciones donde existen opiniones opuestas relacionadas con: ${contenido}.`,
+                        `Observamos un video o escuchamos un audio de un debate/entrevista infantil para identificar cómo defienden sus ideas.`,
+                        `Leemos un texto (entrevista, artículo o poesía) relacionado con el tema y compartimos primeras impresiones.`,
+                        `Realizamos juegos de roles asumiendo el papel de entrevistador y entrevistado o debatientes.`
+                    ],
+                    teoria: [
+                        `Conceptualizamos el debate/entrevista y las características del lenguaje formal en contextos académicos y comunitarios.`,
+                        `Analizamos la estructura de la argumentación (tesis, base y conclusión) y las reglas de acentuación correspondientes.`,
+                        `Estudiamos las partes del texto y las reglas ortográficas y gramaticales vinculadas al contenido.`,
+                        `Explicamos los modos verbales y su uso adecuado dentro de la expresión oral y escrita.`
+                    ],
+                    produccion: [
+                        `Elaboramos un guion básico de debate o cuestionario de entrevista sobre temas del contexto escolar y comunitario.`,
+                        `Realizamos un simulacro de debate aplicando argumentos sólidos y lenguaje formal.`,
+                        `Redactamos un cuestionario o producimos un texto escrito aplicando las reglas estudiadas.`,
+                        `Ejecutamos entrevistas reales o debates y grabamos los resultados para su análisis posterior.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre la importancia del respeto a la opinión ajena y el uso de la palabra como puente de comunicación.`,
+                        `Valoramos la argumentación como herramienta para evitar la violencia y construir consensos.`,
+                        `Apreciamos la lectura y la escritura como medios para conocer trayectorias y expresar ideas con claridad.`,
+                        `Reflexionamos sobre el uso del lenguaje formal y la escucha activa en la convivencia comunitaria.`
+                    ]
+                },
+                "Ciencias Sociales": {
+                    practica: [
+                        `Observamos un mapa histórico y dialogamos sobre los primeros contactos y las pérdidas territoriales de Bolivia.`,
+                        `Escuchamos relatos o leyendas sobre la resistencia cultural de nuestros ancestros.`,
+                        `Realizamos un sociodrama breve representando situaciones de la época colonial o de lucha.`,
+                        `Visitamos de forma virtual o mediante imágenes un sitio histórico o museo relacionado con el tema.`
+                    ],
+                    teoria: [
+                        `Investigamos y sistematizamos las causas y consecuencias de la invasión española y las pérdidas territoriales.`,
+                        `Analizamos los mecanismos de imposición cultural, religiosa y económica de la colonia.`,
+                        `Estudiamos el funcionamiento de la mita, la encomienda y el sistema de tributos coloniales.`,
+                        `Conceptualizamos la ruptura de los sistemas de producción comunitaria y la importancia de la soberanía.`
+                    ],
+                    produccion: [
+                        `Elaboramos un cuadro comparativo sobre la vida antes y después del contacto inicial o de las pérdidas territoriales.`,
+                        `Realizamos un mural creativo que rescate elementos culturales que sobrevivieron a la colonia.`,
+                        `Dibujamos diagramas sobre el flujo de riquezas o elaboramos mapas conceptuales históricos.`,
+                        `Redactamos un ensayo breve sobre la importancia de la soberanía económica y cultural hoy en día.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre el derecho fundamental a la vida, la libertad y la soberanía de los pueblos.`,
+                        `Apreciamos la riqueza de la identidad pluricultural y lingüística actual de Bolivia.`,
+                        `Evaluamos críticamente cómo el extractivismo y la explotación afectaron a las comunidades.`,
+                        `Reflexionamos sobre la importancia de recuperar prácticas económicas y culturales comunitarias sostenibles.`
+                    ]
+                },
+                "Artes Plásticas y Visuales": {
+                    practica: [
+                        `Observamos diferentes objetos del entorno y trazamos líneas simples usando las escuadras.`,
+                        `Medimos nuestras hojas de trabajo y marcamos puntos guía para el uso de instrumentos geométricos.`,
+                        `Exploramos imágenes de petroglifos y pictogramas hallados en Bolivia y comentamos sus formas.`,
+                        `Diseñamos un boceto que combine estructuras lineales técnicas con figuras de petroglifos o motivos locales.`
+                    ],
+                    teoria: [
+                        `Definimos las funciones de la escuadra y el cartabón en el trazado de paralelas y perpendiculares.`,
+                        `Conceptualizamos la importancia del formato, el margen y la organización visual en el dibujo técnico.`,
+                        `Investigamos el origen y la función comunicativa de los diseños decorativos ancestrales.`,
+                        `Sistematizamos el proceso de composición artística integrando técnica y creatividad.`
+                    ],
+                    produccion: [
+                        `Elaboramos una lámina de práctica con diversos ángulos y tramas lineales precisas.`,
+                        `Realizamos el rotulado y trazado de márgenes estandarizados en nuestros cuadernos.`,
+                        `Dibujamos una serie de pictogramas tradicionales respetando sus proporciones originales.`,
+                        `Elaboramos un cuadro decorativo final que represente una escena inspirada en el pasado o en la prevención de la violencia.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre la importancia de la precisión en el dibujo para diversas profesiones y oficios.`,
+                        `Apreciamos el orden y la estética en la organización de nuestros materiales de estudio.`,
+                        `Analizamos el valor de estas expresiones como base de nuestra identidad cultural.`,
+                        `Dialogamos sobre cómo el arte actual puede rescatar saberes de nuestros ancestros.`
+                    ]
+                },
+                "Ciencias Naturales": {
+                    practica: [
+                        `Partimos de un recorrido por las inmediaciones de la unidad educativa para identificar la gestión de residuos y el acceso al agua.`,
+                        `Realizamos ejercicios de respiración consciente para observar el movimiento del tórax y dialogamos sobre el aire que respiramos.`,
+                        `Observamos videos o láminas que muestran la diferencia entre un pulmón sano y uno afectado por contaminación o tabaco.`,
+                        `Investigamos sobre las fuentes de contaminación del aire o erosión en Bermejo y compartimos hallazgos.`
+                    ],
+                    teoria: [
+                        `Conceptualizamos el saneamiento básico (agua, alcantarillado, basura) y su relación con la prevención de enfermedades.`,
+                        `Analizamos la anatomía del sistema respiratorio y su funcionamiento en el intercambio gaseoso.`,
+                        `Conceptualizamos las sustancias tóxicas del cigarrillo y las enfermedades respiratorias asociadas.`,
+                        `Analizamos cómo la contaminación del aire y la erosión afectan a los sistemas de vida y los métodos de prevención.`
+                    ],
+                    produccion: [
+                        `Elaboramos un mapa de riesgos sanitarios de nuestro barrio o comunidad.`,
+                        `Construimos un modelo mecánico de pulmones utilizando botellas de plástico y globos.`,
+                        `Elaboramos mensajes preventivos y afiches creativos contra el consumo de tabaco y la contaminación.`,
+                        `Redactamos un decálogo de acciones para reducir riesgos sanitarios y ambientales en la comunidad.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre nuestra responsabilidad individual y colectiva en el mantenimiento de la limpieza pública.`,
+                        `Valoramos la importancia del aire puro y del cuidado del cuerpo para el correcto funcionamiento del organismo.`,
+                        `Asumimos una postura crítica frente a las presiones sociales y el consumo de sustancias nocivas.`,
+                        `Reflexionamos sobre el derecho a vivir en un medio ambiente sano y libre de contaminantes.`
+                    ]
+                },
+                "Matemática": {
+                    practica: [
+                        `Partimos de la repartición de alimentos locales (frutas u objetos) para identificar fracciones y proporciones.`,
+                        `Observamos y medimos las puertas, ventanas o canchas del aula y la escuela (cuadriláteros).`,
+                        `Identificamos líneas paralelas y perpendiculares en el diseño de las canchas deportivas o del edificio.`,
+                        `Jugamos a "ubicar el tesoro" o figuras usando coordenadas en el patio o en una cuadrícula grande.`
+                    ],
+                    teoria: [
+                        `Conceptualizamos las fracciones simples y complejas y los algoritmos de resolución de problemas fraccionarios.`,
+                        `Clasificamos los paralelogramos y analizamos sus propiedades, fórmulas de perímetro y área.`,
+                        `Definimos paralelismo y perpendicularidad en figuras y cuerpos geométricos.`,
+                        `Conceptualizamos el sistema de ejes coordenados y la ubicación de puntos en el plano cartesiano.`
+                    ],
+                    produccion: [
+                        `Elaboramos un recetario o problemas contextualizados con cantidades fraccionarias.`,
+                        `Realizamos maquetas de figuras planas utilizando cartón reciclado y calculamos sus medidas.`,
+                        `Dibujamos planos arquitectónicos sencillos aplicando trazos geométricos precisos.`,
+                        `Representamos figuras geométricas complejas dentro del plano cartesiano.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre la importancia de la equidad en la distribución de recursos y la precisión matemática.`,
+                        `Valoramos la utilidad de la geometría en las construcciones y el diseño de nuestra comunidad.`,
+                        `Reflexionamos sobre la precisión geométrica en el arte, la arquitectura y la vida cotidiana.`,
+                        `Apreciamos el uso de la tecnología y los mapas para la ubicación espacial y la resolución de problemas.`
+                    ]
+                },
+                "Técnica Tecnológica": {
+                    practica: [
+                        `Observamos motores reciclados de juguetes antiguos y componentes electrónicos básicos.`,
+                        `Manipulamos transformadores o pilas en desuso para ver su estructura interna (con seguridad).`,
+                        `Comprobamos el voltaje de diferentes pilas con un tester o de forma segura.`,
+                        `Ensamblamos la estructura del robot o mecanismo usando material del entorno.`
+                    ],
+                    teoria: [
+                        `Conceptualizamos la función del motor y de los componentes electrónicos básicos.`,
+                        `Analizamos la diferencia entre corriente continua y alterna y las normas de seguridad.`,
+                        `Estudiamos la composición y capacidad de las baterías y el uso de fuentes de energía.`,
+                        `Definimos la lógica de movimiento, tracción y ensamblaje de un juguete robot móvil.`
+                    ],
+                    produccion: [
+                        `Elaboramos un circuito simple de prueba o un mecanismo básico funcional.`,
+                        `Esquematizamos el funcionamiento de un transformador o conexión básica.`,
+                        `Instalamos portapilas y conectamos fuentes de energía en nuestras bases de trabajo.`,
+                        `Finalizamos la construcción del juguete robot móvil o mecanismo funcional.`
+                    ],
+                    valoracion: [
+                        `Reflexionamos sobre la importancia del reciclaje electrónico y el uso responsable de la energía.`,
+                        `Reflexionamos sobre el uso seguro de la energía eléctrica en el hogar y la escuela.`,
+                        `Valoramos el impacto ambiental de las pilas y el uso de alternativas recargables.`,
+                        `Apreciamos la capacidad creativa para resolver problemas técnicos con materiales del entorno.`
+                    ]
+                }
+            };
+
+            // Default genérico si no hay plantilla específica
+            const def = {
+                practica: [`Partimos de los saberes previos y experiencias cotidianas relacionadas con: ${contenido}.`],
+                teoria: [`Conceptualizamos de forma colectiva el contenido: ${contenido}, utilizando ejemplos del contexto local.`],
+                produccion: [`Aplicamos lo aprendido mediante actividades productivas y creativas vinculadas a ${contenido}.`],
+                valoracion: [`Reflexionamos de manera comunitaria sobre lo aprendido y su aporte a la convivencia pacífica y al PSP.`]
+            };
+
+            const p = plantillas[area] || def;
+            // Variamos el índice para que no siempre sea el mismo orden
+            const base = (semana - 1) % 4;
+            const idx = (base + Math.floor(Math.random() * 2)) % 4;
+            return {
+                practica: p.practica[idx] || p.practica[0],
+                teoria: p.teoria[idx] || p.teoria[0],
+                produccion: p.produccion[idx] || p.produccion[0],
+                valoracion: p.valoracion[idx] || p.valoracion[0]
+            };
+        }
+
+        // ========== HELPERS DE VARIEDAD (cada generación es distinta) ==========
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+        const verbosObjetivo = {
+            "Comunicación y Lenguajes": ["Fortalece", "Desarrolla", "Potencia", "Consolida", "Promueve"],
+            "Ciencias Sociales": ["Analiza", "Examina", "Comprende", "Valora", "Interpreta"],
+            "Artes Plásticas y Visuales": ["Aplica", "Emplea", "Utiliza", "Desarrolla", "Crea"],
+            "Ciencias Naturales": ["Analiza", "Investiga", "Explora", "Comprende", "Explica"],
+            "Matemática": ["Aplica", "Resuelve", "Utiliza", "Desarrolla", "Emplea"],
+            "Técnica Tecnológica": ["Aplica", "Construye", "Desarrolla", "Emplea", "Implementa"],
+            "Educación Física y Deportes": ["Practica", "Ejecuta", "Desarrolla", "Fortalece", "Aplica"],
+            "Educación Musical": ["Interpreta", "Valora", "Desarrolla", "Practica", "Expresa"],
+            "Valores, Espiritualidades y Religiones": ["Reconoce", "Valora", "Promueve", "Fortalece", "Asume"]
+        };
+        const verbosSer = ["Demuestra", "Manifiesta", "Practica", "Asume", "Evidencia", "Muestra"];
+        const verbosSaber = ["Identifica", "Explica", "Reconoce", "Describe", "Comprende", "Diferencia", "Clasifica", "Relaciona"];
+        const verbosHacer = ["Elabora", "Produce", "Participa", "Construye", "Redacta", "Ejecuta", "Realiza", "Aplica"];
+
+        function variarIndicadores(indBase) {
+            // Mezcla y cambia verbos para que cada generación sea distinta
+            const ser = shuffle(indBase.ser).map(txt => {
+                const resto = txt.replace(/^(Demuestra|Manifiesta|Practica|Asume|Evidencia|Muestra)\s+/i, '');
+                return pick(verbosSer) + " " + resto;
+            });
+            const saber = shuffle(indBase.saber).map(txt => {
+                const resto = txt.replace(/^(Identifica|Explica|Reconoce|Describe|Comprende|Diferencia|Clasifica|Relaciona)\s+/i, '');
+                return pick(verbosSaber) + " " + resto;
+            });
+            const hacer = shuffle(indBase.hacer).map(txt => {
+                const resto = txt.replace(/^(Elabora|Produce|Participa|Construye|Redacta|Ejecuta|Realiza|Aplica)\s+/i, '');
+                return pick(verbosHacer) + " " + resto;
+            });
+            return { ser, saber, hacer };
+        }
+
+        function generarObjetivoArea(area, contenidos) {
+            const v = pick(verbosObjetivo[area] || ["Desarrolla"]);
+            const temas = contenidos.slice(0, 3).join(', ');
+            const temas2 = contenidos.slice(0, 2).join(' y ');
+            
+            const plantillas = {
+                "Comunicación y Lenguajes": [
+                    `${v} las capacidades comunicativas de expresión oral y producción escrita mediante el estudio de ${temas}, aplicando correctamente las reglas de acentuación y modos verbales, para promover el uso del lenguaje formal y la argumentación crítica en la comunidad educativa.`,
+                    `${v} la expresión oral y la producción escrita a partir de ${temas2}, fortaleciendo el lenguaje formal, la argumentación y el respeto en la comunicación comunitaria.`,
+                    `${v} habilidades de lectura comprensiva, escritura creativa y expresión oral relacionadas con ${temas}, orientadas al diálogo respetuoso y a la construcción de consensos.`
+                ],
+                "Ciencias Sociales": [
+                    `${v} críticamente ${temas2}, promoviendo el respeto a la diversidad cultural y la valoración de la soberanía nacional para consolidar la identidad del Estado Plurinacional.`,
+                    `${v} las consecuencias históricas de ${temas2}, fortaleciendo la conciencia crítica y el sentido de pertenencia al Estado Plurinacional.`,
+                    `${v} los procesos históricos vinculados a ${temas2}, impulsando el respeto a los pueblos originarios y la valoración de la soberanía.`
+                ],
+                "Artes Plásticas y Visuales": [
+                    `${v} el manejo de instrumentos geométricos y la simbología de los pueblos originarios en la creación de diseños decorativos relacionados con ${temas2}, fortaleciendo la precisión técnica y la valoración de nuestra identidad cultural.`,
+                    `${v} técnicas de dibujo y composición inspiradas en ${temas2}, desarrollando la creatividad y el aprecio por los saberes ancestrales.`,
+                    `${v} diseños decorativos y composiciones artísticas a partir de ${temas2}, integrando precisión técnica e identidad cultural.`
+                ],
+                "Ciencias Naturales": [
+                    `${v} ${temas2}, promoviendo hábitos de vida saludable y el cuidado del medio ambiente para prevenir riesgos en la salud comunitaria.`,
+                    `${v} la estructura y función relacionadas con ${temas2}, impulsando prácticas de cuidado del cuerpo y del entorno.`,
+                    `${v} procesos naturales vinculados a ${temas2}, fortaleciendo la conciencia ambiental y los hábitos saludables.`
+                ],
+                "Matemática": [
+                    `${v} propiedades geométricas y resolución de problemas fraccionarios en situaciones de la vida cotidiana relacionadas con ${temas2}, para fortalecer el pensamiento lógico-matemático.`,
+                    `${v} operaciones con fracciones y conceptos geométricos vinculados a ${temas2}, resolviendo problemas del contexto comunitario.`,
+                    `${v} el pensamiento lógico-matemático mediante ${temas2}, aplicados a situaciones reales de la vida cotidiana.`
+                ],
+                "Técnica Tecnológica": [
+                    `${v} conocimientos sobre ${temas2} mediante la construcción de mecanismos básicos y juguetes robóticos para promover la innovación tecnológica en la comunidad.`,
+                    `${v} componentes electrónicos y fuentes de energía en la elaboración de mecanismos relacionados con ${temas2}, impulsando la creatividad tecnológica.`,
+                    `${v} soluciones tecnológicas a partir de ${temas2}, fortaleciendo la innovación y el trabajo colaborativo.`
+                ],
+                "Educación Física y Deportes": [
+                    `${v} ${temas2} fortaleciendo hábitos de nutrición, hidratación e higiene y la convivencia cooperativa en igualdad de género.`,
+                    `${v} habilidades motrices y deportivas vinculadas a ${temas2}, promoviendo el juego limpio y la salud integral.`,
+                    `${v} actividades físicas y deportivas relacionadas con ${temas2}, impulsando la cooperación y los hábitos saludables.`
+                ],
+                "Educación Musical": [
+                    `${v} ${temas2}, desarrollando la sensibilidad musical y el sentido de pertenencia a través de la práctica coral e instrumental.`,
+                    `${v} la práctica musical a partir de ${temas2}, fortaleciendo la expresión artística y la identidad cultural.`,
+                    `${v} himnos, ritmos y danzas vinculados a ${temas2}, promoviendo la valoración de la diversidad musical boliviana.`
+                ],
+                "Valores, Espiritualidades y Religiones": [
+                    `${v} ${temas2}, fortaleciendo la convivencia pacífica, la justicia social y el bienestar común en la comunidad educativa.`,
+                    `${v} principios de justicia, dualidad y bienestar común relacionados con ${temas2}, impulsando la paz y el respeto a la diversidad.`,
+                    `${v} la práctica de valores sociocomunitarios a partir de ${temas2}, orientada a la prevención de la violencia y la armonía comunitaria.`
+                ]
+            };
+            const momentos = {};
+            const tiposMomento = ['practica', 'teoria', 'produccion', 'valoracion'];
+            const areaData = plantillas[area] || {};
+            tiposMomento.forEach(m => {
+                const especificas = areaData[m] || [];
+                const genericas = SINONIMOS_GENERICOS[m] || [];
+                const todas = [...especificas, ...genericas];
+                const unicas = todas.filter((item, index) => todas.indexOf(item) === index);
+                momentos[m] = unicas.length > 0 ? pick(unicas) : `Contenido relacionado con ${temas} en ${m}.`;
+            });
+            return momentos;
+        }
+
+        function generarAdaptacionArea(area, contenidos, tipo) {
+            const contTexto = contenidos.slice(0, 2).join(' y ');
+            const contCorto = contenidos[0] || "el contenido del mes";
+
+            // Dificultades específicas por área
+            const dificultades = {
+                "Comunicación y Lenguajes": [
+                    "Dificultad en la expresión oral fluida y en la organización de ideas al argumentar o entrevistar",
+                    "Dificultad en la lectoescritura y en la aplicación de reglas ortográficas durante la producción de textos",
+                    "Dificultad para estructurar un debate o entrevista de forma coherente"
+                ],
+                "Ciencias Sociales": [
+                    "Dificultad para comprender secuencias históricas y relacionar causas-consecuencias",
+                    "Dificultad en la comprensión de conceptos abstractos de la época colonial y la soberanía",
+                    "Dificultad para ubicar hechos históricos en el tiempo y en el espacio (mapa)"
+                ],
+                "Artes Plásticas y Visuales": [
+                    "Dificultad en el manejo fino de instrumentos geométricos y en la precisión del trazo",
+                    "Dificultad para coordinar el uso de escuadras, regla y transportador en diseños",
+                    "Dificultad en la composición visual y en la reproducción de proporciones de pictogramas"
+                ],
+                "Ciencias Naturales": [
+                    "Dificultad para comprender procesos abstractos del cuerpo humano y del medio ambiente",
+                    "Dificultad en la memorización de estructuras anatómicas y su función",
+                    "Dificultad para relacionar hábitos cotidianos con la prevención de riesgos sanitarios"
+                ],
+                "Matemática": [
+                    "Dificultad en el razonamiento lógico-matemático y en la resolución de problemas fraccionarios",
+                    "Dificultad para comprender propiedades de figuras geométricas y ubicar puntos en el plano",
+                    "Dificultad en el cálculo de perímetros, áreas y operaciones con fracciones"
+                ],
+                "Técnica Tecnológica": [
+                    "Dificultad en la coordinación motriz fina al ensamblar componentes electrónicos",
+                    "Dificultad para seguir secuencias de armado de circuitos o mecanismos",
+                    "Dificultad en la comprensión de conceptos de energía y conexiones eléctricas básicas"
+                ],
+                "Educación Física y Deportes": [
+                    "Dificultad en la coordinación motriz gruesa y en la ejecución de desplazamientos",
+                    "Dificultad para seguir reglas de juego y secuencias de movimientos deportivos",
+                    "Dificultad en el control del equilibrio y la orientación espacial en cancha"
+                ],
+                "Educación Musical": [
+                    "Dificultad en la discriminación auditiva y en la entonación de melodías",
+                    "Dificultad para seguir el ritmo y los compases en la práctica coral o instrumental",
+                    "Dificultad en la lectura de figuras rítmicas básicas"
+                ],
+                "Valores, Espiritualidades y Religiones": [
+                    "Dificultad para interiorizar conceptos abstractos de justicia, dualidad y bienestar común",
+                    "Dificultad en la expresión de ideas sobre diversidad religiosa y resolución de conflictos",
+                    "Dificultad para relacionar valores con situaciones concretas de la convivencia diaria"
+                ]
+            };
+            let dificultad = pick(dificultades[area] || ["Dificultad general de aprendizaje / ritmo de aprendizaje diferente"]);
+
+            // Adaptaciones ESPECÍFICAS por área y tipo
+            const adaptacionesPorArea = {
+                "Comunicación y Lenguajes": {
+                    significativa: [
+                        `Priorizamos la expresión oral sobre la escritura. Se utilizan imágenes, pictogramas y plantillas prediseñadas para organizar el debate o la entrevista. Se reduce la extensión de los textos escritos y se permite responder con palabras clave. Tiempo adicional y evaluación centrada en la participación oral. Contenidos prioritarios: ${contTexto}.`,
+                        `Se simplifica la estructura del debate/entrevista a 3 preguntas básicas con apoyo visual. Uso de grabaciones cortas y roles dramatizados. La producción escrita se limita a completar esquemas. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo para la planificación del debate y la redacción de la entrevista. Trabajo en pareja con compañero monitor. Uso de organizadores gráficos y ejemplos de entrevistas reales del contexto. Se mantienen los objetivos esenciales. Contenidos: ${contTexto}.`,
+                        `Reducción de la cantidad de preguntas del cuestionario y apoyo con modelos de lenguaje formal. Se prioriza la práctica oral con retroalimentación inmediata. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Material impreso ampliado de las partes de la entrevista y del debate. Ubicación preferente cerca del docente. Apoyo auditivo con grabaciones y tiempo adicional para la expresión oral y escrita. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Ciencias Sociales": {
+                    significativa: [
+                        `Uso intensivo de mapas, imágenes históricas y videos cortos. Se simplifica el vocabulario técnico (mita, encomienda, soberanía) y se permite expresar aprendizajes mediante dibujos o selección de imágenes. Evaluación centrada en la identificación visual de hechos y personajes. Contenidos prioritarios: ${contTexto}.`,
+                        `Se trabaja con líneas de tiempo ilustradas y sociodramas breves. Respuestas orales o de opción múltiple en lugar de ensayos. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo para la lectura de textos históricos. Uso de mapas conceptuales simplificados y trabajo en pareja. Ejemplos contextualizados a Bermejo y Bolivia. Se mantienen los objetivos esenciales. Contenidos: ${contTexto}.`,
+                        `Reducción de la cantidad de hechos a memorizar; se priorizan causas y consecuencias principales con apoyo de láminas. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Mapas y láminas en tamaño ampliado. Ubicación preferente. Tiempo adicional para ubicar hechos en el mapa y para la producción de esquemas. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Artes Plásticas y Visuales": {
+                    significativa: [
+                        `Se prioriza el trazo guiado y el uso de plantillas de escuadras y ángulos. Se reduce la complejidad de los diseños de pictogramas/petroglifos a formas básicas. Evaluación centrada en el esfuerzo y la participación más que en la precisión técnica. Contenidos prioritarios: ${contTexto}.`,
+                        `Uso de material pre-dibujado para completar y colorear. Apoyo mano sobre mano en el manejo de escuadras cuando sea necesario. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo para el trazado de márgenes y diseños. Trabajo en pareja para el uso de escuadras. Modelos paso a paso de pictogramas. Se mantienen los objetivos de precisión y valoración cultural. Contenidos: ${contTexto}.`,
+                        `Reducción del número de ejercicios de trazo; se prioriza un diseño final bien logrado con apoyo de guías visuales. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Instrumentos de trazo con mango grueso si se requiere. Hojas con márgenes premarcados. Tiempo adicional y espacio de trabajo amplio. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Ciencias Naturales": {
+                    significativa: [
+                        `Sustitución de lecturas densas por esquemas e imágenes del sistema respiratorio / saneamiento. Construcción de modelos concretos (pulmones con botella). Evaluación oral o mediante señalización de partes. Contenidos prioritarios: ${contTexto}.`,
+                        `Se trabaja con maquetas y clasificación física de desechos. Respuestas mediante selección de imágenes. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo en la construcción de modelos y en la elaboración de afiches preventivos. Trabajo con compañero monitor. Ejemplos del contexto de Bermejo (quema de chacos, basura). Se mantienen los objetivos esenciales. Contenidos: ${contTexto}.`,
+                        `Reducción de la cantidad de órganos o etapas a memorizar; se priorizan las funciones principales con apoyo visual. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Láminas ampliadas del cuerpo humano y del ciclo del agua. Tiempo adicional para experimentos y recorridos. Apoyo visual y auditivo. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Matemática": {
+                    significativa: [
+                        `Uso de material concreto (fichas, frutas, cartones) para representar fracciones y figuras. Se priorizan fracciones con denominadores comunes y cálculo de perímetro por suma de lados en objetos reales. Evaluación con material manipulativo. Contenidos prioritarios: ${contTexto}.`,
+                        `Plano cartesiano reducido (3x3 o 5x5). Problemas de un solo paso. Apoyo con dibujos y regletas. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo y cantidad de ejercicios de fracciones y geometría. Trabajo en pareja. Uso de material concreto y ejemplos del aula (puertas, ventanas, canchas). Se mantienen los objetivos esenciales. Contenidos: ${contTexto}.`,
+                        `Reducción del número de problemas; se prioriza la comprensión del procedimiento con apoyo de esquemas. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Material concreto y hojas con cuadrículas amplias. Tiempo adicional para cálculos y construcciones. Ubicación preferente. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Técnica Tecnológica": {
+                    significativa: [
+                        `Se simplifica el circuito a una conexión directa (pila-motor) sin componentes intermedios. Armado por pasos muy cortos con modelos físicos. Evaluación centrada en la participación y el logro del movimiento básico. Contenidos prioritarios: ${contTexto}.`,
+                        `Uso de piezas de encaje o conexiones prearmadas. Apoyo directo del docente en el ensamblaje. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo para el ensamblaje del robot o mecanismo. Trabajo en pareja. Guías visuales paso a paso. Se mantienen los objetivos de construcción y comprensión de energía. Contenidos: ${contTexto}.`,
+                        `Reducción de la complejidad del mecanismo; se prioriza un circuito funcional simple. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Herramientas de mango grueso si se requiere. Espacio de trabajo amplio y tiempo adicional. Apoyo visual de diagramas ampliados. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Educación Física y Deportes": {
+                    significativa: [
+                        `Se adaptan las distancias, el tamaño del implemento y las reglas del mini deporte. Se priorizan desplazamientos básicos y juegos cooperativos. Evaluación centrada en la participación y el respeto a las reglas simples. Contenidos prioritarios: ${contTexto}.`,
+                        `Secuencias de movimiento más cortas y con demostración constante. Apoyo de un compañero guía. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo en las estaciones de práctica. Trabajo en parejas o tríos. Demostraciones previas y correcciones individuales. Se mantienen los objetivos de habilidad y cooperación. Contenidos: ${contTexto}.`,
+                        `Reducción del número de gestos técnicos a ejecutar; se prioriza la calidad sobre la cantidad. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Espacio despejado y señalizado. Implementos adaptados si se requiere. Tiempo adicional para el calentamiento y la ejecución. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Educación Musical": {
+                    significativa: [
+                        `Se prioriza la imitación auditiva y el movimiento corporal sobre la lectura de partituras. Fragmentos cortos de himnos o ritmos. Evaluación centrada en la participación y el seguimiento del pulso. Contenidos prioritarios: ${contTexto}.`,
+                        `Uso de gestos y colores para representar figuras rítmicas. Canto en grupo con apoyo del docente. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo para la práctica coral e instrumental. Trabajo en pequeños grupos. Apoyo con audios de referencia. Se mantienen los objetivos de entonación y ritmo. Contenidos: ${contTexto}.`,
+                        `Reducción de la extensión de las piezas; se priorizan frases musicales cortas. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Ubicación cerca de la fuente de sonido. Partituras o letras ampliadas. Tiempo adicional para ensayos. Contenidos: ${contTexto}.`
+                    ]
+                },
+                "Valores, Espiritualidades y Religiones": {
+                    significativa: [
+                        `Se trabajan los valores a través de situaciones concretas de la escuela y la familia (imágenes, cuentos cortos, dramatizaciones). Respuestas orales o mediante dibujos. Evaluación centrada en actitudes observables. Contenidos prioritarios: ${contTexto}.`,
+                        `Uso de ejemplos cotidianos de justicia, respeto y resolución de conflictos. Apoyo visual permanente. Contenidos: ${contCorto}.`
+                    ],
+                    no_significativa: [
+                        `Ajuste de tiempo en las reflexiones y diálogos. Trabajo en círculo con apoyo de un compañero. Ejemplos del contexto comunitario. Se mantienen los objetivos de valoración y convivencia. Contenidos: ${contTexto}.`,
+                        `Reducción de la complejidad de los conceptos; se priorizan acciones concretas de bienestar común. Contenidos: ${contCorto}.`
+                    ],
+                    acceso: [
+                        `Material visual ampliado sobre ceremonias, dualidad y resolución de conflictos. Tiempo adicional para la expresión de ideas. Contenidos: ${contTexto}.`
+                    ]
+                }
+            };
+
+            const tipoKey = tipo === "significativa" ? "significativa" : (tipo === "no_significativa" ? "no_significativa" : "acceso");
+            const opcionesAdapt = (adaptacionesPorArea[area] && adaptacionesPorArea[area][tipoKey])
+                ? adaptacionesPorArea[area][tipoKey]
+                : [`Adaptación según el tipo seleccionado para el contenido: ${contTexto}.`];
+            let adaptacion = pick(opcionesAdapt);
+
+            // Criterios base + específicos por área
+            let criterios = {
+                ser: [
+                    "Participa con entusiasmo en actividades grupales y prácticas",
+                    "Respeta el turno de palabra y los materiales de trabajo de sus compañeros"
+                ],
+                saber: [
+                    `Identifica oralmente o visualmente los elementos básicos de ${contTexto}`,
+                    "Reconoce mediante imágenes o ejemplos concretos los conceptos prioritarios",
+                    "Nombra partes o características principales del contenido con apoyo visual",
+                    "Relaciona el contenido con situaciones de la vida diaria mediante ejemplos",
+                    "Diferencia elementos clave del tema usando apoyos visuales o concretos",
+                    "Identifica al menos dos ideas centrales del contenido trabajado"
+                ],
+                hacer: [
+                    "Expresa sus ideas de forma clara de manera oral o con apoyos",
+                    "Realiza una producción sencilla (dibujo, esquema o texto corto) del tema",
+                    "Participa en la actividad práctica con apoyo del maestro o compañero monitor"
+                ]
+            };
+
+            if (area === "Matemática") {
+                criterios.saber = [
+                    "Reconoce gráficamente las partes de una fracción simple utilizando dibujos o material concreto",
+                    "Identifica objetos del entorno que tienen forma de cuadrado o rectángulo",
+                    "Nombra los elementos básicos de una figura geométrica (lados y vértices)",
+                    "Diferencia entre una línea recta paralela y una secante mediante ejemplos físicos",
+                    "Ubica coordenadas simples en un plano cartesiano reducido con apoyo del maestro",
+                    "Resuelve problemas fraccionarios sencillos con material concreto"
+                ];
+                criterios.hacer = [
+                    "Representa fracciones sencillas utilizando material concreto y didáctico",
+                    "Construye cuadriláteros básicos empleando reglas o material del entorno",
+                    "Mide longitudes de objetos pequeños del aula de forma aproximada"
+                ];
+            } else if (area === "Ciencias Naturales") {
+                criterios.saber = [
+                    "Identifica visualmente y nombra los órganos principales del sistema respiratorio o elementos del saneamiento",
+                    "Explica el proceso de respiración (entrar y salir aire) de forma oral o mediante señas",
+                    "Reconoce la relación entre basura/contaminación y enfermedad mediante la selección de imágenes",
+                    "Señala al menos una consecuencia de la contaminación del aire o de la falta de saneamiento",
+                    "Identifica acciones de cuidado del cuerpo y del medio ambiente",
+                    "Relaciona el contenido con hábitos de vida saludable del contexto local"
+                ];
+            } else if (area === "Comunicación y Lenguajes") {
+                criterios.saber = [
+                    "Identifica oralmente qué es un debate o una entrevista",
+                    "Reconoce visualmente los signos de interrogación y exclamación",
+                    "Nombra partes básicas de una entrevista mediante imágenes",
+                    "Relaciona acciones (verbos) con imágenes de la vida diaria",
+                    "Diferencia entre preguntar y responder",
+                    "Identifica al entrevistador o debatiente en un video o dramatización"
+                ];
+                criterios.hacer = [
+                    "Expresa sus ideas de forma clara en el debate o entrevista oral",
+                    "Realiza una entrevista corta de tres preguntas usando apoyo visual",
+                    "Escribe palabras clave del tema con ayuda de plantillas"
+                ];
+            } else if (area === "Artes Plásticas y Visuales") {
+                criterios.saber = [
+                    "Identifica la escuadra y el cartabón y su uso básico",
+                    "Reconoce formas simples de pictogramas o petroglifos",
+                    "Nombra los instrumentos de trazo utilizados en clase",
+                    "Diferencia una línea paralela de una perpendicular con apoyo visual",
+                    "Señala márgenes y cajetines en una hoja modelo",
+                    "Relaciona el diseño decorativo con elementos de su contexto"
+                ];
+                criterios.hacer = [
+                    "Realiza trazos guiados con escuadra o plantilla",
+                    "Completa un diseño sencillo de pictograma con apoyo",
+                    "Colorea o entinta respetando los límites del dibujo"
+                ];
+            }
+
+            criterios = variarIndicadores(criterios);
+            return { dificultad, adaptacion, criterios };
+        }
+
+        // ===================== DESCARGAR EN WORD =====================
+        function descargarWord() {
+            const contenido = document.getElementById('contenido-pdc');
+            if (!contenido || !contenido.innerHTML.trim()) {
+                alert("Primero genere el PDC.");
+                return;
+            }
+            const numero = document.getElementById('numeroPDC').value || "4";
+            const mes = document.getElementById('mes').value || "Mayo";
+            const html = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<title>PDC Nº ${numero} - ${mes} 2026</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+    @page {
+        size: Letter landscape;
+        margin: 1.2cm 1cm;
+        mso-page-orientation: landscape;
+    }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; }
+    h2, h3, p, strong, td, th, li { color: #000; }
+    table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 9pt; }
+    th, td { border: 1px solid #666; padding: 4px 6px; vertical-align: top; color: #000; }
+    th { background: #f0f0f0; color: #000; text-align: center; }
+    .area-title { background: none; color: #000; padding: 6px 0; margin: 14px 0 6px 0; font-weight: bold; font-size: 11pt; }
+    .adapt-title { background: none; color: #000; padding: 5px 0; margin: 10px 0 5px 0; font-weight: bold; }
+    .obj-box { background: none; border: none; padding: 4px 0; margin: 6px 0; color: #000; }
+    .momento { margin-bottom: 3px; color: #000; }
+    .momento strong { color: #000; }
+    /* Orientación horizontal Carta para Word */
+    @page Section1 {
+        size: 792pt 612pt;
+        mso-page-orientation: landscape;
+        margin: 1.2cm 1cm 1.2cm 1cm;
+    }
+    div.Section1 { page: Section1; }
+</style>
+</head>
+<body>
+<div class="Section1">
+${contenido.innerHTML}
+</div>
+</body>
+</html>`;
+            const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PDC_${numero}_${mes}_2026_5toB_OscarAlfaro.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ===================== FUNCIONES DE UI =====================
+        function cargarContenidos() {
+            const trim = document.getElementById('trimestre').value;
+            const container = document.getElementById('contenidos-container');
+            const areasDiv = document.getElementById('areas-checkboxes');
+            
+            if (!trim) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            areasDiv.innerHTML = '';
+            
+            const areas = patData[trim].areas;
+            
+            for (const [area, contenidos] of Object.entries(areas)) {
+                const box = document.createElement('div');
+                box.className = 'area-box';
+                const areaId = area.replace(/[\s,]/g, '');
+                box.innerHTML = `<h3>${area}</h3>`;
+                
+                const selectAll = document.createElement('div');
+                selectAll.className = 'checkbox-item';
+                selectAll.innerHTML = `<input type="checkbox" id="all-${areaId}" onchange="toggleAll('${areaId}', this.checked)"> <strong>Seleccionar todos</strong>`;
+                box.appendChild(selectAll);
+                
+                contenidos.forEach((cont, idx) => {
+                    const id = `cont-${trim}-${areaId}-${idx}`;
+                    const item = document.createElement('div');
+                    item.className = 'checkbox-item';
+                    item.innerHTML = `<input type="checkbox" class="cont-${areaId}" id="${id}" value="${cont}" data-area="${area}"> <label for="${id}">${cont}</label>`;
+                    box.appendChild(item);
+                });
+                
+                areasDiv.appendChild(box);
+            }
+        }
+
+        function toggleAll(areaId, checked) {
+            document.querySelectorAll(`.cont-${areaId}`).forEach(cb => cb.checked = checked);
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('trimestre').value = '';
+            document.getElementById('contenidos-container').style.display = 'none';
+            document.getElementById('resultado').style.display = 'none';
+        }
+
+        function obtenerSeleccionados() {
+            const seleccionados = {};
+            document.querySelectorAll('#areas-checkboxes input[type="checkbox"]:checked').forEach(cb => {
+                if (cb.id.startsWith('all-')) return;
+                const area = cb.dataset.area;
+                if (!seleccionados[area]) seleccionados[area] = [];
+                seleccionados[area].push(cb.value);
+            });
+            return seleccionados;
+        }
+
+        function generarPDC(usarIA) {
+            const trim = document.getElementById('trimestre').value;
+            const adapt = document.getElementById('adaptacion').value;
+            const mes = document.getElementById('mes').value;
+            const fechaIni = document.getElementById('fechaIni').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const numeroPDC = document.getElementById('numeroPDC').value || "4";
+            
+            if (!trim) {
+                alert("Por favor seleccione el trimestre.");
+                return;
+            }
+            
+            const seleccionados = obtenerSeleccionados();
+            if (Object.keys(seleccionados).length === 0) {
+                alert("Seleccione al menos un contenido de alguna área.");
+                return;
+            }
+            
+            const resultadoDiv = document.getElementById('resultado');
+            const contenidoDiv = document.getElementById('contenido-pdc');
+            resultadoDiv.style.display = 'block';
+            
+            if (usarIA) {
+                contenidoDiv.innerHTML = `<div class="loading"><div class="spinner"></div>Generando PDC con Inteligencia Artificial...<br><small>Construyendo tablas por área, momentos metodológicos e indicadores específicos...</small></div>`;
+                setTimeout(() => construirPDC(trim, adapt, mes, fechaIni, fechaFin, numeroPDC, seleccionados, true), 1600);
+            } else {
+                construirPDC(trim, adapt, mes, fechaIni, fechaFin, numeroPDC, seleccionados, false);
+            }
+        }
+
+        function construirPDC(trim, adapt, mes, fechaIni, fechaFin, numeroPDC, seleccionados, conIA) {
+            const dataTrim = patData[trim];
+            const areasSeleccionadas = Object.keys(seleccionados);
+            const tipoAdaptTxt = {
+                'acceso': 'Adaptación de Acceso',
+                'no_significativa': 'Adaptación No Significativa',
+                'significativa': 'Adaptación Significativa'
+            }[adapt];
+
+            let html = '';
+
+            // PORTADA / DATOS REFERENCIALES (formato igual al ejemplo)
+            html += `
+            <h2 style="text-align:center;color:#000;margin-bottom:1rem;">PLAN DE DESARROLLO CURRICULAR Nº ${numeroPDC}</h2>
+            
+            <h3 style="color:#000;margin:1rem 0 0.5rem;">1. DATOS REFERENCIALES</h3>
+            <table class="datos-table">
+                <tr>
+                    <td>Distrito educativo</td>
+                    <td>Bermejo</td>
+                    <td style="font-weight:600;">Unidad educativa</td>
+                    <td>Oscar Alfaro</td>
+                </tr>
+                <tr>
+                    <td>Nivel</td>
+                    <td>Primaria Comunitaria Vocacional</td>
+                    <td style="font-weight:600;">Año de escolaridad</td>
+                    <td>Quinto B</td>
+                </tr>
+                <tr>
+                    <td>Maestro</td>
+                    <td colspan="3">Lic. Daniel Llanos Pallares</td>
+                </tr>
+                <tr>
+                    <td>Áreas</td>
+                    <td colspan="3">${areasSeleccionadas.join(' / ')}</td>
+                </tr>
+                <tr>
+                    <td>Trimestre</td>
+                    <td>${trim === '1' ? 'Primero' : trim === '2' ? 'Segundo' : 'Tercero'}</td>
+                    <td style="font-weight:600;">Tipo de adaptación</td>
+                    <td>${tipoAdaptTxt}</td>
+                </tr>
+                <tr>
+                    <td>Tiempo</td>
+                    <td colspan="3"><strong>Del:</strong> ${fechaIni} &nbsp;&nbsp;&nbsp; <strong>Al:</strong> ${fechaFin}</td>
+                </tr>
+            </table>
+
+            <h3 style="color:#000;margin:1.5rem 0 0.5rem;">2. DESARROLLO</h3>
+            <p style="font-weight:600;margin-bottom:0.4rem;color:#000;">Objetivo holístico de nivel</p>
+            <div class="obj-box">
+                Fortalecemos la práctica de valores sociocomunitarios y principios ético-morales, en el desarrollo del pensamiento crítico; lectura comprensiva, escritura creativa; el pensamiento lógico matemático, resolución de problemas; a través de la convivencia comunitaria biocéntrica; la sensibilidad en las manifestaciones culturales de arte, música, danza, deporte; el uso adecuado de las Tecnologías de Información y Comunicación, la exploración, experimentación e investigación para contribuir a la educación intracultural, intercultural y plurilingüe del Estado Plurinacional, en complementariedad, diálogo de saberes, conocimientos propios y universales.
+            </div>
+            `;
+
+            // POR CADA ÁREA
+            for (const area of areasSeleccionadas) {
+                const contenidos = seleccionados[area];
+                const objetivoArea = generarObjetivoArea(area, contenidos);
+                const indBase = bancosIndicadores[area] || bancosIndicadores["Comunicación y Lenguajes"];
+                const ind = variarIndicadores(indBase); // Cada generación usa verbos e indicadores distintos
+                
+                // Distribuir contenidos en 4 semanas
+                const semanasCont = [[], [], [], []];
+                contenidos.forEach((c, i) => {
+                    semanasCont[i % 4].push(c);
+                });
+                // Asegurar que no queden vacías
+                for (let s = 0; s < 4; s++) {
+                    if (semanasCont[s].length === 0) {
+                        semanasCont[s].push(contenidos[s % contenidos.length]);
+                    }
+                }
+
+                // Periodos por defecto según área (aproximados del ejemplo)
+                const periodosBase = {
+                    "Comunicación y Lenguajes": 9,
+                    "Matemática": 7,
+                    "Ciencias Naturales": 2,
+                    "Ciencias Sociales": 2,
+                    "Artes Plásticas y Visuales": 2,
+                    "Técnica Tecnológica": 2,
+                    "Educación Física y Deportes": 2,
+                    "Educación Musical": 2,
+                    "Valores, Espiritualidades y Religiones": 2
+                };
+                const periodos = periodosBase[area] || 2;
+
+                html += `<div class="area-title">Área de saberes y conocimiento: ${area}</div>`;
+                
+                html += `
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:18%">Objetivo de aprendizaje</th>
+                            <th style="width:18%">Contenidos</th>
+                            <th style="width:32%">Momentos del proceso de aprendizaje</th>
+                            <th style="width:14%">Recursos</th>
+                            <th style="width:6%">Periodos</th>
+                            <th style="width:12%">Criterios de evaluación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                // Primera fila con objetivo y criterios (rowspan)
+                const momentos1 = generarMomentosEspecificos(area, semanasCont[0].join('; '), 1);
+                html += `
+                    <tr>
+                        <td rowspan="4" style="vertical-align:top; color:#000;">
+                            ${objetivoArea}
+                        </td>
+                        <td><strong>SEMANA 1:</strong><br>${semanasCont[0].join('. ')}</td>
+                        <td>
+                            <div class="momento"><strong>Práctica</strong><br>${momentos1.practica}</div>
+                            <div class="momento"><strong>Teoría</strong><br>${momentos1.teoria}</div>
+                            <div class="momento"><strong>Producción</strong><br>${momentos1.produccion}</div>
+                            <div class="momento"><strong>Valoración</strong><br>${momentos1.valoracion}</div>
+                        </td>
+                        <td>Textos de apoyo, papelógrafos, marcadores, material del contexto, recursos TIC según disponibilidad.</td>
+                        <td style="text-align:center;">${periodos}</td>
+                        <td rowspan="4" style="vertical-align:top; font-size:0.8rem; color:#000;">
+                            <strong>SER:</strong><br>
+                            ${ind.ser.map(i => `- ${i}`).join('<br>')}<br><br>
+                            <strong>SABER:</strong><br>
+                            ${ind.saber.map(i => `- ${i}`).join('<br>')}<br><br>
+                            <strong>HACER:</strong><br>
+                            ${ind.hacer.map(i => `- ${i}`).join('<br>')}
+                        </td>
+                    </tr>
+                `;
+
+                for (let s = 1; s < 4; s++) {
+                    const momentos = generarMomentosEspecificos(area, semanasCont[s].join('; '), s + 1);
+                    html += `
+                    <tr>
+                        <td><strong>SEMANA ${s + 1}:</strong><br>${semanasCont[s].join('. ')}</td>
+                        <td>
+                            <div class="momento"><strong>Práctica</strong><br>${momentos.practica}</div>
+                            <div class="momento"><strong>Teoría</strong><br>${momentos.teoria}</div>
+                            <div class="momento"><strong>Producción</strong><br>${momentos.produccion}</div>
+                            <div class="momento"><strong>Valoración</strong><br>${momentos.valoracion}</div>
+                        </td>
+                        <td>Material concreto, textos, recursos visuales, cuadernos, material del entorno.</td>
+                        <td style="text-align:center;">${periodos}</td>
+                    </tr>
+                    `;
+                }
+
+                html += `</tbody></table>`;
+
+                // ADAPTACIONES
+                const adaptData = generarAdaptacionArea(area, contenidos, adapt);
+                html += `
+                <div class="adapt-title">ADAPTACIONES CURRICULARES ${tipoAdaptTxt.toUpperCase()}</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:20%">Contenidos</th>
+                            <th style="width:18%">Dificultad de aprendizaje</th>
+                            <th style="width:32%">Adaptación</th>
+                            <th style="width:30%">Criterio de evaluación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${contenidos.slice(0, 3).join('. ')}</td>
+                            <td>${adaptData.dificultad}</td>
+                            <td>${adaptData.adaptacion}</td>
+                            <td style="font-size:0.8rem;">
+                                <strong>SER:</strong><br>
+                                ${adaptData.criterios.ser.map(i => `- ${i}`).join('<br>')}<br><br>
+                                <strong>SABER:</strong><br>
+                                ${adaptData.criterios.saber.map(i => `- ${i}`).join('<br>')}<br><br>
+                                <strong>HACER:</strong><br>
+                                ${adaptData.criterios.hacer.map(i => `- ${i}`).join('<br>')}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                `;
+            }
+
+            html += `
+            <div style="margin-top:2rem; text-align:center; font-size:0.88rem; color:#000; border-top:1px solid #ccc; padding-top:1rem;">
+                <p><strong>Proyecto Socio-Productivo:</strong> “Prevención de la violencia física, psicológica y emocional de los estudiantes para garantizar una vida saludable al interior de la comunidad educativa”</p>
+                <p style="margin-top:0.4rem;">Documento generado a partir del Plan Anual Trimestralizado · UE Oscar Alfaro · Bermejo · Gestión 2026</p>
+            </div>
+            `;
+
+            document.getElementById('contenido-pdc').innerHTML = html;
+            window.scrollTo({ top: document.getElementById('resultado').offsetTop - 20, behavior: 'smooth' });
+        }
+    </script>
+
+    <!-- ============================================================
+         ASISTENTE IA CON PYTORCH - GENERADOR DE PDC
+         ============================================================ -->
+    <div class="card" style="margin-top: 2rem; border: 2px solid var(--accent);">
+        <h2 style="color: var(--accent);">🤖 Asistente PDC con PyTorch</h2>
+        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--dark);">
+            Usa la inteligencia artificial para clasificar áreas, generar actividades y validar tu planificación.
+        </p>
+
+        <div class="form-group">
+            <label>Escribe un objetivo de aprendizaje:</label>
+            <textarea id="obj-ia" rows="3" placeholder="Ej: El estudiante resolverá problemas de fracciones aplicando estrategias de cálculo mental..." style="width: 100%; padding: 0.6rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit;"></textarea>
+        </div>
+
+        <div class="form-row" style="margin-top: 1rem;">
+            <button onclick="clasificarArea()" class="btn" style="background: var(--primary); color: white;">📊 Clasificar Área</button>
+            <button onclick="generarActividad('practica')" class="btn" style="background: var(--secondary); color: white;">📝 Actividad Práctica</button>
+            <button onclick="generarActividad('teoria')" class="btn" style="background: var(--secondary); color: white;">📖 Actividad Teórica</button>
+            <button onclick="generarActividad('produccion')" class="btn" style="background: var(--secondary); color: white;">🎨 Producción</button>
+            <button onclick="generarActividad('valoracion')" class="btn" style="background: var(--secondary); color: white;">✅ Valoración</button>
+        </div>
+
+        <!-- Revisión de redacción con LanguageTool -->
+        <div style="margin-top:1.5rem; padding:1rem; background:var(--light); border-radius:8px; border-left:4px solid var(--accent);">
+            <h4 style="margin:0 0 0.5rem 0; color:var(--dark);">✍️ Revisar redacción (LanguageTool)</h4>
+            <textarea id="texto-revision" rows="3" placeholder="Pega aquí un objetivo, actividad o cualquier texto para revisar ortografía y gramática..." style="width:100%; margin-bottom:0.5rem; font-family:inherit;"></textarea>
+            <button onclick="revisarRedaccion()" class="btn" style="background:var(--accent); color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer;">🔍 Revisar gramática y ortografía</button>
+            <div id="resultado-revision" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+        </div>
+
+        <div id="resultado-ia" style="margin-top: 1rem; padding: 1rem; background: var(--light); border-radius: 8px; display: none; border-left: 4px solid var(--success);"></div>
+    </div>
+
+    <script>
+    async function llamarIA(endpoint, body) {
+        try {
+            const respuesta = await fetch(`http://localhost:5000/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            return await respuesta.json();
+        } catch (error) {
+            alert('Error: ¿Está corriendo el servidor Python? Ejecuta INICIAR.bat');
+            console.error(error);
+            return null;
+        }
+    }
+
+    async function clasificarArea() {
+        const texto = document.getElementById('obj-ia').value.trim();
+        if (!texto) {
+            alert('Por favor escribe un objetivo primero');
+            return;
+        }
+
+        const datos = await llamarIA('clasificar-area', { texto: texto });
+        if (!datos) return;
+
+        const div = document.getElementById('resultado-ia');
+        div.style.display = 'block';
+        div.innerHTML = `
+            <strong>📊 Área sugerida:</strong> ${datos.area}<br>
+            <strong>🎯 Confianza:</strong> ${(datos.confianza * 100).toFixed(1)}%<br>
+            <details style="margin-top:0.5rem; font-size:0.85rem;">
+                <summary>Detalle por área</summary>
+                <ul style="margin:0.3rem 0 0 1rem; padding:0;">
+                    ${Object.entries(datos.detalle).map(([area, score]) => `<li>${area}: ${score}</li>`).join('')}
+                </ul>
+            </details>
+        `;
+    }
+
+    async function generarActividad(tipo) {
+        const texto = document.getElementById('obj-ia').value.trim();
+        if (!texto) {
+            alert('Por favor escribe un objetivo primero');
+            return;
+        }
+
+        const datos = await llamarIA('generar-actividad', { tipo: tipo, area: 'general' });
+        if (!datos) return;
+
+        const div = document.getElementById('resultado-ia');
+        div.style.display = 'block';
+        const lista = datos.actividades || [datos.actividad_sugerida];
+        const itemsHTML = lista.map((a, i) => `<li>${i + 1}. ${a}</li>`).join('');
+
+        div.innerHTML = `
+            <strong>📋 Tipo:</strong> ${datos.tipo.charAt(0).toUpperCase() + datos.tipo.slice(1)}<br>
+            <strong>💡 Actividades sugeridas:</strong>
+            <ul style="margin:0.5rem 0 0 1rem; padding:0;">${itemsHTML}</ul>
+            <strong>⏱️ Tiempo estimado:</strong> ${datos.tiempo_estimado} minutos
+            <br><br>
+            <button onclick="generarActividad('${tipo}')" class="btn" style="margin-top:0.5rem; background:var(--secondary); color:white; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">🔄 Otra opción</button>
+        `;
+    }
+
+    async function revisarRedaccion() {
+        const texto = document.getElementById('texto-revision').value.trim();
+        if (!texto) {
+            alert('Escribe un texto para revisar');
+            return;
+        }
+
+        const div = document.getElementById('resultado-revision');
+        div.innerHTML = '<span style="color:var(--secondary); font-size:0.85rem;">Revisando con LanguageTool...</span>';
+
+        try {
+            const respuesta = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'text=' + encodeURIComponent(texto) + '&language=es'
+            });
+            const data = await respuesta.json();
+
+            if (!data.matches || data.matches.length === 0) {
+                div.innerHTML = '<span style="color:var(--success);">✅ No se encontraron errores de gramática u ortografía.</span>';
+                return;
+            }
+
+            let html = `<strong>⚠️ Se encontraron ${data.matches.length} posible(s) error(es):</strong><ul style="margin:0.3rem 0 0 1rem; padding:0;">`;
+            data.matches.slice(0, 10).forEach(match => {
+                const contexto = match.context ? match.context.text : '';
+                const reemplazo = match.replacements && match.replacements[0] ? match.replacements[0].value : '';
+                html += `<li><strong>${match.shortMessage || match.message}</strong><br>
+                         <em>Contexto:</em> …${contexto}…<br>
+                         ${reemplazo ? '<em>Sugerencia:</em> "' + reemplazo + '"' : ''}
+                         </li>`;
+            });
+            html += '</ul>';
+            if (data.matches.length > 10) {
+                html += `<p style="font-size:0.8rem;color:#666;">Y ${data.matches.length - 10} más…</p>`;
+            }
+            div.innerHTML = html;
+        } catch (error) {
+            div.innerHTML = '<span style="color:#d9534f;">Error al conectar con LanguageTool. Verifica tu conexión a internet.</span>';
+            console.error(error);
+        }
+    }
+
+    async function revisarRedaccionPDC() {
+        const texto = document.getElementById('texto-revision-pdc').value.trim();
+        if (!texto) {
+            alert('Escribe un texto para revisar');
+            return;
+        }
+        const div = document.getElementById('resultado-revision-pdc');
+        div.innerHTML = '<span style="color:var(--secondary); font-size:0.85rem;">Revisando con LanguageTool...</span>';
+        try {
+            const respuesta = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'text=' + encodeURIComponent(texto) + '&language=es'
+            });
+            const data = await respuesta.json();
+            if (!data.matches || data.matches.length === 0) {
+                div.innerHTML = '<span style="color:var(--success);">✅ No se encontraron errores de gramática u ortografía.</span>';
+                return;
+            }
+            let html = `<strong>⚠️ Se encontraron ${data.matches.length} posible(s) error(es):</strong><ul style="margin:0.3rem 0 0 1rem; padding:0;">`;
+            data.matches.slice(0, 10).forEach(match => {
+                const contexto = match.context ? match.context.text : '';
+                const reemplazo = match.replacements && match.replacements[0] ? match.replacements[0].value : '';
+                html += `<li><strong>${match.shortMessage || match.message}</strong><br><em>Contexto:</em> …${contexto}…<br>${reemplazo ? '<em>Sugerencia:</em> "' + reemplazo + '"' : ''}</li>`;
+            });
+            html += '</ul>';
+            if (data.matches.length > 10) html += `<p style="font-size:0.8rem;color:#666;">Y ${data.matches.length - 10} más…</p>`;
+            div.innerHTML = html;
+        } catch (error) {
+            div.innerHTML = '<span style="color:#d9534f;">Error al conectar con LanguageTool. Verifica tu conexión a internet.</span>';
+            console.error(error);
+        }
+    }
+    </script>
+
+    <script>
+    // Ocultar corrector ortográfico del formulario y panel de asistente IA
+    (function(){
+        // Ocultar corrector del formulario principal (padre del textarea texto-revision-pdc)
+        var ta = document.getElementById('texto-revision-pdc');
+        if(ta && ta.closest) {
+            var cont = ta.closest('div[style*="border-left:4px solid var(--accent);"]');
+            if(cont) cont.style.display = 'none';
+        }
+        // Ocultar panel completo del Asistente PDC con PyTorch
+        var h2s = document.querySelectorAll('h2');
+        for(var i=0; i<h2s.length; i++){
+            if(h2s[i].textContent && h2s[i].textContent.indexOf('Asistente PDC') !== -1){
+                var card = h2s[i].closest ? h2s[i].closest('.card') : null;
+                if(card) card.style.display = 'none';
+            }
+        }
+    })();
+    </script>
+
+</body>
+</html>

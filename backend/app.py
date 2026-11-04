@@ -25,7 +25,7 @@ model.eval()
 # Ruta principal: sirve tu archivo HTML
 @app.route('/')
 def index():
-    return send_from_directory('..', 'GENERADOR DE PDC.html')
+    return send_from_directory('..', 'index.html')
 
 # Ruta de predicción con PyTorch
 @app.route('/predict', methods=['POST'])
