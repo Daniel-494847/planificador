@@ -241,7 +241,7 @@
         .datos-table td:first-child { font-weight: 600; width: 22%; background: none; color: #000; }
         @page {
             size: Letter landscape;
-            margin: 1.2cm 1cm;
+            margin: 1.5cm;
         }
         @media print {
             body { background: white; }
@@ -1512,7 +1512,7 @@
 <style>
     @page {
         size: Letter landscape;
-        margin: 1.2cm 1cm;
+        margin: 1.5cm;
         mso-page-orientation: landscape;
     }
     body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; }
@@ -1529,7 +1529,7 @@
     @page Section1 {
         size: 792pt 612pt;
         mso-page-orientation: landscape;
-        margin: 1.2cm 1cm 1.2cm 1cm;
+        margin: 1.5cm;
     }
     div.Section1 { page: Section1; }
 </style>
@@ -1794,9 +1794,10 @@ ${contenido.innerHTML}
 
                 html += `</tbody></table>`;
 
-                // ADAPTACIONES
-                const adaptData = generarAdaptacionArea(area, contenidos, adapt);
-                html += `
+                // ADAPTACIONES (solo si no es "Sin adaptaciones")
+                if (adapt !== 'sin_adaptaciones') {
+                    const adaptData = generarAdaptacionArea(area, contenidos, adapt);
+                    html += `
                 <div class="adapt-title">ADAPTACIONES CURRICULARES ${tipoAdaptTxt.toUpperCase()}</div>
                 <table>
                     <thead>
@@ -1824,6 +1825,7 @@ ${contenido.innerHTML}
                     </tbody>
                 </table>
                 `;
+                }
             }
 
             html += `
