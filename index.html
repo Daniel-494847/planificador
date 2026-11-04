@@ -1679,10 +1679,16 @@ ${contenido.innerHTML}
 
         const div = document.getElementById('resultado-ia');
         div.style.display = 'block';
+        const lista = datos.actividades || [datos.actividad_sugerida];
+        const itemsHTML = lista.map((a, i) => `<li>${i + 1}. ${a}</li>`).join('');
+
         div.innerHTML = `
             <strong>📋 Tipo:</strong> ${datos.tipo.charAt(0).toUpperCase() + datos.tipo.slice(1)}<br>
-            <strong>💡 Actividad sugerida:</strong> ${datos.actividad_sugerida}<br>
+            <strong>💡 Actividades sugeridas:</strong>
+            <ul style="margin:0.5rem 0 0 1rem; padding:0;">${itemsHTML}</ul>
             <strong>⏱️ Tiempo estimado:</strong> ${datos.tiempo_estimado} minutos
+            <br><br>
+            <button onclick="generarActividad('${tipo}')" class="btn" style="margin-top:0.5rem; background:var(--secondary); color:white; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">🔄 Otra opción</button>
         `;
     }
     </script>

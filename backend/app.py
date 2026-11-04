@@ -3,6 +3,7 @@ from flask_cors import CORS
 import torch
 import torch.nn as nn
 import os
+import random
 
 app = Flask(__name__, static_folder='..', static_url_path='')
 CORS(app)
@@ -86,53 +87,70 @@ def clasificar_area():
 ACTIVIDADES_POR_TIPO = {
     'practica': [
         'Resolver ejercicios prácticos en el cuaderno',
-        'Realizar un experimento sencillo',
-        'Participar en un debate guiado',
-        'Resolver un problema de la vida real',
-        'Trabajar en grupos para resolver una situación',
-        'Manipular materiales concretos para aprender el concepto'
+        'Realizar un experimento sencillo con materiales del aula',
+        'Participar en un debate guiado sobre el tema',
+        'Resolver un problema de la vida real en grupos',
+        'Trabajar en equipos para resolver una situación problema',
+        'Manipular materiales concretos para aprender el concepto',
+        'Crear un modelo o representación física del tema',
+        'Aplicar el concepto en una situación cotidiana',
+        'Realizar una práctica de laboratorio o de campo',
+        'Diseñar un juego educativo sobre el contenido visto'
     ],
     'teoria': [
-        'Explicar conceptos clave con ejemplos',
-        'Leer un texto informativo y resumir',
-        'Ver un video educativo y tomar notas',
-        'Participar en una clase magistral interactiva',
+        'Explicar conceptos clave con ejemplos del entorno',
+        'Leer un texto informativo y resumir las ideas principales',
+        'Ver un video educativo y tomar notas estructuradas',
+        'Participar en una clase magistral interactiva con preguntas',
         'Analizar un caso práctico presentado por el docente',
-        'Elaborar un esquema o resumen del tema'
+        'Elaborar un esquema o mapa resumen del tema',
+        'Investigar información en fuentes confiables y presentarla',
+        'Comparar dos teorías o enfoques sobre el mismo tema',
+        'Realizar una lectura guiada con preguntas de comprensión',
+        'Escuchar una exposición y extraer las ideas centrales'
     ],
     'produccion': [
-        'Crear un mapa conceptual',
-        'Redactar un ensayo corto',
-        'Diseñar un afiche informativo',
-        'Elaborar un maquete o modelo',
+        'Crear un mapa conceptual del tema estudiado',
+        'Redactar un ensayo corto sobre el contenido',
+        'Diseñar un afiche informativo para el aula',
+        'Elaborar un maquete o modelo tridimensional',
         'Escribir un cuento o poema relacionado con el tema',
-        'Crear una presentación digital'
+        'Crear una presentación digital con diapositivas',
+        'Grabar un video explicando el concepto aprendido',
+        'Diseñar un infográfico con datos clave del tema',
+        'Construir un portafolio de evidencias de aprendizaje',
+        'Desarrollar un proyecto creativo que aplique el contenido'
     ],
     'valoracion': [
-        'Responder un cuestionario',
-        'Realizar una autoevaluación',
+        'Responder un cuestionario de opción múltiple',
+        'Realizar una autoevaluación con rúbrica',
         'Participar en una retroalimentación entre pares',
-        'Presentar un proyecto final',
-        'Resolver una prueba escrita',
-        'Demostrar una habilidad en una exhibición'
+        'Presentar un proyecto final ante el grupo',
+        'Resolver una prueba escrita de comprensión',
+        'Demostrar una habilidad en una exhibición práctica',
+        'Entregar un diario de aprendizaje semanal',
+        'Crear un video resumen de lo aprendido',
+        'Resolver un problema de aplicación en tiempo limitado',
+        'Participar en una entrevista o defensa oral del tema'
     ]
 }
 
 @app.route('/generar-actividad', methods=['POST'])
 def generar_actividad():
-    """Genera una actividad sugerida según el tipo y área."""
+    """Genera 3 variantes de actividad sugerida según el tipo y área."""
     data = request.get_json()
     tipo = data.get('tipo', 'practica')
     area = data.get('area', 'general')
 
     lista = ACTIVIDADES_POR_TIPO.get(tipo, ACTIVIDADES_POR_TIPO['practica'])
-    sugerencia = __import__('random').choice(lista)
+    sugerencias = random.sample(lista, min(3, len(lista)))
 
     return jsonify({
         'tipo': tipo,
         'area': area,
-        'actividad_sugerida': sugerencia,
-        'tiempo_estimado': __import__('random').randint(20, 45)
+        'actividades': sugerencias,
+        'actividad_sugerida': sugerencias[0] if sugerencias else '',
+        'tiempo_estimado': random.randint(20, 45)
     })
 
 
